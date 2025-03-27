@@ -4,11 +4,10 @@
 //
 //  Created by Ammar Sufyan on 26/03/25.
 //
-// hi
+
 import SwiftUI
 
-struct SplashScreenView: View {
-    @AppStorage("hasLaunchedBefore") private var hasLaunchedBefore: Bool = false
+struct SplashScreen: View {
     @State private var isActive = false
     @State private var scale: CGFloat = 0.5
     @State private var opacity = 0.0
@@ -16,7 +15,7 @@ struct SplashScreenView: View {
 
     var body: some View {
         Group {
-            if isActive || hasLaunchedBefore {
+            if isActive {
                 HomeView()
             } else {
                 ZStack {
@@ -66,7 +65,6 @@ struct SplashScreenView: View {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         withAnimation {
-                            hasLaunchedBefore = true
                             isActive = true
                         }
                     }
@@ -77,6 +75,6 @@ struct SplashScreenView: View {
 }
 
 #Preview {
-    SplashScreenView()
+    SplashScreen()
         .modelContainer(for: Item.self, inMemory: true)
 }
