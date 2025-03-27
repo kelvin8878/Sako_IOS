@@ -1,5 +1,5 @@
 //
-//  SplashScreenView.swift
+//  SplashScreen.swift
 //  Sako
 //
 //  Created by Ammar Sufyan on 26/03/25.
