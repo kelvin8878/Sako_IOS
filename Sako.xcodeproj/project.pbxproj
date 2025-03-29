@@ -8,6 +8,8 @@
 
 /* Begin PBXFileReference section */
 		85A057362D9382F100508FD7 /* Sako.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sako.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B636DF992D98670B00CADAD2 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
+		B67531CD2D9886160036D3DF /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,6 +44,16 @@
 			children = (
 				85A057362D9382F100508FD7 /* Sako.app */,
 			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B636DF9C2D98670B00CADAD2 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B67531D12D9886160036D3DF /* Products */ = {
+			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -97,6 +109,16 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 85A057372D9382F100508FD7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B636DF9C2D98670B00CADAD2 /* Products */;
+					ProjectRef = B636DF992D98670B00CADAD2 /* Sako.xcodeproj */;
+				},
+				{
+					ProductGroup = B67531D12D9886160036D3DF /* Products */;
+					ProjectRef = B67531CD2D9886160036D3DF /* Sako.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				85A057352D9382F100508FD7 /* Sako */,

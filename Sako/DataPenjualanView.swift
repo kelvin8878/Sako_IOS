@@ -40,7 +40,7 @@ struct DataPenjualanView: View {
                 VStack(spacing: 16) {
                     // Header with title and search bar below
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Data Penjualan")
+                        Text("Data Produk")
                             .font(.title2)
                             .bold()
                             .foregroundColor(.black)
@@ -49,7 +49,7 @@ struct DataPenjualanView: View {
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.gray)
-                            TextField("Cari penjualan...", text: $searchText)
+                            TextField("Cari Produk...", text: $searchText)
                                 .textFieldStyle(.plain)
                         }
                         .padding(.horizontal)
