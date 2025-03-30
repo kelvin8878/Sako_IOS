@@ -75,7 +75,7 @@ struct HomeView: View {
                     
                     // Buttons Row
                     HStack(spacing: 16) {
-                        NavigationLink(destination: DataProdukView()) {
+                        NavigationLink(destination: DataPenjualanView()) {
                             HStack {
                                 Image(systemName: "dollarsign.circle.fill")
                                     .font(.system(size: 30))
@@ -88,7 +88,7 @@ struct HomeView: View {
                             .cornerRadius(12)
                         }
                         
-                        NavigationLink(destination: DataPenjualanView()) {
+                        NavigationLink(destination: DataProdukView()) {
                             HStack {
                                 Image(systemName: "shippingbox.fill")
                                     .font(.system(size: 30))
