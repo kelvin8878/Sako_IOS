@@ -1,5 +1,5 @@
 //
-//  DataProdukView.swift
+//  TambahProdukView.swift
 //  Sako
 //
 //  Created by Ammar Sufyan on 30/03/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct DataProdukView: View {
+struct TambahProdukView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    DataProdukView()
+    TambahProdukView()
 }
