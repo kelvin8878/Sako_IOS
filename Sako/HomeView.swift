@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct HomeView: View {
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
