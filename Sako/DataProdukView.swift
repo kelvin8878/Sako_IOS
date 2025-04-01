@@ -12,6 +12,8 @@ struct DataProdukView: View {
     @State private var editingProduct: Product?
     @State private var categories = ["Nasi", "Ayam", "Sayur", "Minuman", "Dessert"]
     
+    @Environment(\.dismiss) var dismiss
+    
     struct Product: Identifiable, Equatable {
         let id = UUID()
         var name: String
@@ -86,19 +88,23 @@ struct DataProdukView: View {
             .navigationTitle("Data Produk")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // Back Button
+                // Back Button (tanpa panah)
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Kembali") {
-                        NavigationUtil.popToRootView()
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("Kembali")
+                            .foregroundColor(.blue)
+                            .font(.system(size: 18, weight: .semibold))
                     }
                 }
                 
-                // Add Button - Changed from "+" to "Tambah"
+                // Add Button
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Tambah") {
                         showAddProduct = true
                     }
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                     .disabled(editingProduct != nil)
                 }
             }
@@ -111,9 +117,9 @@ struct DataProdukView: View {
                 )
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
-
 struct ProductCard: View {
     let product: DataProdukView.Product
     let isEditing: Bool
@@ -152,7 +158,7 @@ struct ProductCard: View {
                             .padding(.vertical, 8)
                     }
                     
-                    // Price Field with automatic formatting
+                    // Price Field
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Harga")
                             .font(.system(size: 16, weight: .semibold))
@@ -268,12 +274,9 @@ struct ProductCard: View {
         .animation(.easeInOut, value: isEditing)
     }
     
-    // Automatic price formatting function
     private func formatPrice(_ price: String) -> String {
-        // Remove all non-digit characters
         let cleanPrice = price.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
         
-        // Format with thousand separators
         if let number = Int(cleanPrice) {
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
@@ -365,7 +368,7 @@ struct AddEditProductView: View {
                     }
                     .padding(.vertical, 8)
                     
-                    // Price Field with automatic formatting
+                    // Price Field
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Harga")
                             .font(.system(size: 16, weight: .semibold))
@@ -503,12 +506,9 @@ struct AddEditProductView: View {
         }
     }
     
-    // Automatic price formatting function
     private func formatPrice(_ price: String) -> String {
-        // Remove all non-digit characters
         let cleanPrice = price.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
         
-        // Format with thousand separators
         if let number = Int(cleanPrice) {
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
@@ -533,36 +533,6 @@ extension AddEditProductView.Mode {
         case .add: return nil
         case .edit(let product): return product
         }
-    }
-}
-
-class NavigationUtil {
-    static func popToRootView() {
-        let keyWindow = UIApplication.shared.connectedScenes
-            .filter({$0.activationState == .foregroundActive})
-            .map({$0 as? UIWindowScene})
-            .compactMap({$0})
-            .first?.windows
-            .filter({$0.isKeyWindow}).first
-        
-        if let window = keyWindow {
-            findNavigationController(viewController: window.rootViewController)?
-                .popToRootViewController(animated: true)
-        }
-    }
-    
-    static func findNavigationController(viewController: UIViewController?) -> UINavigationController? {
-        guard let viewController = viewController else { return nil }
-        
-        if let navigationController = viewController as? UINavigationController {
-            return navigationController
-        }
-        
-        for childViewController in viewController.children {
-            return findNavigationController(viewController: childViewController)
-        }
-        
-        return nil
     }
 }
 
