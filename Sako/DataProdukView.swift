@@ -3,12 +3,14 @@ import SwiftUI
 struct DataProdukView: View {
     @State private var searchText = ""
     @State private var showAddProduct = false
+    
     @State private var products = [
         Product(name: "Nasi", price: "4.000", category: "Nasi"),
         Product(name: "Nasi 1/2", price: "4.000", category: "Nasi"),
         Product(name: "Ayam A", price: "10.000", category: "Ayam"),
         Product(name: "Sayur A", price: "5.000", category: "Sayur")
     ]
+    
     @State private var editingProduct: Product?
     @State private var categories = ["Nasi", "Ayam", "Sayur", "Minuman", "Dessert"]
     
