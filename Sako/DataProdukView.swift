@@ -5,14 +5,13 @@ struct DataProdukView: View {
     @State private var showAddProduct = false
     
     @State private var products = [
-        Product(name: "Nasi", price: "4.000", category: "Nasi"),
-        Product(name: "Nasi 1/2", price: "4.000", category: "Nasi"),
-        Product(name: "Ayam A", price: "10.000", category: "Ayam"),
-        Product(name: "Sayur A", price: "5.000", category: "Sayur")
+        Product(name: "Nasi", price: "4.000"),
+        Product(name: "Nasi 1/2", price: "4.000"),
+        Product(name: "Ayam A", price: "10.000"),
+        Product(name: "Sayur A", price: "5.000")
     ]
     
     @State private var editingProduct: Product?
-    @State private var categories = ["Nasi", "Ayam", "Sayur", "Minuman", "Dessert"]
     
     @Environment(\.dismiss) var dismiss
     
@@ -20,7 +19,6 @@ struct DataProdukView: View {
         let id = UUID()
         var name: String
         var price: String
-        var category: String
     }
     
     var filteredProducts: [Product] {
@@ -67,7 +65,6 @@ struct DataProdukView: View {
                             ProductCard(
                                 product: product,
                                 isEditing: editingProduct?.id == product.id,
-                                categories: categories,
                                 onEdit: { editingProduct = product },
                                 onSave: { updatedProduct in
                                     if let index = products.firstIndex(where: { $0.id == product.id }) {
@@ -90,7 +87,7 @@ struct DataProdukView: View {
             .navigationTitle("Data Produk")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // Back Button (tanpa panah)
+                // Back Button
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         dismiss()
@@ -111,9 +108,8 @@ struct DataProdukView: View {
                 }
             }
             .sheet(isPresented: $showAddProduct) {
-                AddEditProductView(
+                TambahProdukView(
                     products: $products,
-                    categories: $categories,
                     mode: .add,
                     onDismiss: { showAddProduct = false }
                 )
@@ -122,21 +118,19 @@ struct DataProdukView: View {
         .navigationBarBackButtonHidden(true)
     }
 }
+
 struct ProductCard: View {
     let product: DataProdukView.Product
     let isEditing: Bool
-    let categories: [String]
     let onEdit: () -> Void
     let onSave: (DataProdukView.Product) -> Void
     let onDelete: () -> Void
     
     @State private var editedProduct: DataProdukView.Product
-    @State private var showingCategoryPicker = false
     
-    init(product: DataProdukView.Product, isEditing: Bool, categories: [String], onEdit: @escaping () -> Void, onSave: @escaping (DataProdukView.Product) -> Void, onDelete: @escaping () -> Void) {
+    init(product: DataProdukView.Product, isEditing: Bool, onEdit: @escaping () -> Void, onSave: @escaping (DataProdukView.Product) -> Void, onDelete: @escaping () -> Void) {
         self.product = product
         self.isEditing = isEditing
-        self.categories = categories
         self.onEdit = onEdit
         self.onSave = onSave
         self.onDelete = onDelete
@@ -176,36 +170,6 @@ struct ProductCard: View {
                         .padding(.vertical, 8)
                     }
                     
-                    // Category Field
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Kategori")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.black)
-                        
-                        HStack {
-                            Text(editedProduct.category)
-                                .font(.system(size: 18))
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                            
-                            Spacer()
-                            
-                            Button(action: { showingCategoryPicker.toggle() }) {
-                                Image(systemName: "chevron.down")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                        .sheet(isPresented: $showingCategoryPicker) {
-                            CategoryPickerView(
-                                categories: categories,
-                                selectedCategory: $editedProduct.category
-                            )
-                        }
-                    }
-                    
                     // Action Buttons
                     HStack(spacing: 16) {
                         Button(action: onDelete) {
@@ -242,14 +206,6 @@ struct ProductCard: View {
                         Text("Rp \(product.price)")
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.black)
-                        
-                        Text(product.category)
-                            .font(.system(size: 16, weight: .medium))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(Color.gray.opacity(0.1))
-                            .foregroundColor(.black)
-                            .cornerRadius(20)
                     }
                     .padding(.leading, 16)
                     
@@ -290,259 +246,6 @@ struct ProductCard: View {
     }
 }
 
-struct CategoryPickerView: View {
-    let categories: [String]
-    @Binding var selectedCategory: String
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        NavigationStack {
-            List(categories, id: \.self) { category in
-                Button(action: {
-                    selectedCategory = category
-                    dismiss()
-                }) {
-                    HStack {
-                        Text(category)
-                            .font(.system(size: 18))
-                            .foregroundColor(.primary)
-                        
-                        Spacer()
-                        
-                        if category == selectedCategory {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.blue)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Pilih Kategori")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Selesai") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-
-struct AddEditProductView: View {
-    enum Mode {
-        case add
-        case edit(product: DataProdukView.Product)
-    }
-    
-    @Binding var products: [DataProdukView.Product]
-    @Binding var categories: [String]
-    let mode: Mode
-    let onDismiss: () -> Void
-    
-    @State private var name: String = ""
-    @State private var price: String = ""
-    @State private var category: String = ""
-    @State private var newCategory: String = ""
-    @State private var showingCategoryPicker = false
-    
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section(
-                    header: Text("INFORMASI PRODUK")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.black)
-                        .padding(.top, 16)
-                ) {
-                    // Name Field
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Nama Produk")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.black)
-                        
-                        TextField("Contoh: Nasi Goreng", text: $name)
-                            .font(.system(size: 18))
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.vertical, 8)
-                    }
-                    .padding(.vertical, 8)
-                    
-                    // Price Field
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("Harga")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.black)
-                        
-                        TextField("Contoh: 15.000", text: Binding(
-                            get: { price },
-                            set: { price = formatPrice($0) }
-                        ))
-                        .font(.system(size: 18))
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .padding(.vertical, 8)
-                    }
-                    .padding(.vertical, 8)
-                    
-                    // Category Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Kategori")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.black)
-                        
-                        // Existing Categories
-                        HStack {
-                            Text(category.isEmpty ? "Pilih Kategori" : category)
-                                .font(.system(size: 18))
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                            
-                            Spacer()
-                            
-                            Button(action: { showingCategoryPicker.toggle() }) {
-                                Image(systemName: "chevron.down")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                        .sheet(isPresented: $showingCategoryPicker) {
-                            CategoryPickerView(
-                                categories: categories,
-                                selectedCategory: $category
-                            )
-                        }
-                        
-                        // Add New Category
-                        HStack {
-                            TextField("Kategori Baru", text: $newCategory)
-                                .font(.system(size: 18))
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            Button(action: {
-                                if !newCategory.isEmpty && !categories.contains(newCategory) {
-                                    categories.append(newCategory)
-                                    category = newCategory
-                                    newCategory = ""
-                                }
-                            }) {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.blue)
-                            }
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-                
-                if case .edit = mode {
-                    Section {
-                        Button(role: .destructive) {
-                            if let index = products.firstIndex(where: { $0.id == (mode.product?.id ?? UUID()) }) {
-                                products.remove(at: index)
-                            }
-                            dismiss()
-                            onDismiss()
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Text("Hapus Produk")
-                                    .font(.system(size: 18, weight: .semibold))
-                                Spacer()
-                            }
-                            .padding(.vertical, 8)
-                        }
-                    }
-                }
-            }
-            .navigationTitle(mode.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Batal") {
-                        dismiss()
-                        onDismiss()
-                    }
-                }
-                
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Simpan") {
-                        saveProduct()
-                        dismiss()
-                        onDismiss()
-                    }
-                    .font(.system(size: 18, weight: .semibold))
-                    .disabled(name.isEmpty || price.isEmpty || category.isEmpty)
-                }
-            }
-            .onAppear {
-                if case let .edit(product) = mode {
-                    name = product.name
-                    price = product.price
-                    category = product.category
-                } else if !categories.isEmpty {
-                    category = categories[0]
-                }
-            }
-        }
-    }
-    
-    private func saveProduct() {
-        let newProduct = DataProdukView.Product(
-            name: name,
-            price: price,
-            category: category
-        )
-        
-        switch mode {
-        case .add:
-            products.append(newProduct)
-        case .edit(let product):
-            if let index = products.firstIndex(where: { $0.id == product.id }) {
-                products[index] = newProduct
-            }
-        }
-    }
-    
-    private func formatPrice(_ price: String) -> String {
-        let cleanPrice = price.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
-        
-        if let number = Int(cleanPrice) {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.groupingSeparator = "."
-            formatter.maximumFractionDigits = 0
-            return formatter.string(from: NSNumber(value: number)) ?? price
-        }
-        return price
-    }
-}
-
-extension AddEditProductView.Mode {
-    var title: String {
-        switch self {
-        case .add: return "Tambah Produk"
-        case .edit: return "Edit Produk"
-        }
-    }
-    
-    var product: DataProdukView.Product? {
-        switch self {
-        case .add: return nil
-        case .edit(let product): return product
-        }
-    }
-}
-
 #Preview {
     DataProdukView()
-}
-
-#Preview("Dark Mode") {
-    DataProdukView()
-        .preferredColorScheme(.dark)
 }
