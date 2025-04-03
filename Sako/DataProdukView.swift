@@ -5,10 +5,11 @@ struct DataProdukView: View {
     @State private var showAddProduct = false
     
     @State private var products = [
-        Product(name: "Nasi", price: "4.000"),
+        Product(name: "Nasi Goreng Kambing", price: "4.000"),
         Product(name: "Nasi 1/2", price: "4.000"),
         Product(name: "Ayam A", price: "10.000"),
-        Product(name: "Sayur A", price: "5.000")
+        Product(name: "Sayur A", price: "5.000"),
+        Product(name: "Sayur C", price: "15.000")
     ]
     
     @State private var editingProduct: Product?
@@ -25,19 +26,28 @@ struct DataProdukView: View {
         searchText.isEmpty ? products : products.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
     }
     
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                HStack {
+                    Text("Data Produk")
+                        .font(.system(size: 34, weight: .bold))
+                        .foregroundColor(Color(.black))
+                    Spacer() // Ini akan mendorong teks ke kiri
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                
                 // Search Bar
                 ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
-                        .shadow(radius: 2)
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(.systemGray6)) // Warna abu-abu sistem yang bagus
                     
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
-                            .padding(.leading, 8)
+                            .padding(.leading, 13) // Padding lebih besar untuk keseimbangan visual
                         
                         TextField("Cari produk...", text: $searchText)
                             .textFieldStyle(.plain)
@@ -48,12 +58,12 @@ struct DataProdukView: View {
                             Button(action: { searchText = "" }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.gray)
-                                    .padding(.trailing, 8)
+                                    .padding(.trailing, 12) // Padding lebih besar untuk keseimbangan visual
                             }
                         }
                     }
                 }
-                .frame(height: 44)
+                .frame(height: 38) // Tinggi lebih standar untuk UI
                 .padding(.horizontal, 16)
                 .padding(.top, 12)
                 .padding(.bottom, 8)
@@ -84,8 +94,6 @@ struct DataProdukView: View {
                     .padding(.vertical, 8)
                 }
             }
-            .navigationTitle("Data Produk")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // Back Button
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -94,7 +102,7 @@ struct DataProdukView: View {
                     }) {
                         Text("Kembali")
                             .foregroundColor(.blue)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 20, weight: .semibold))
                     }
                 }
                 
@@ -103,7 +111,7 @@ struct DataProdukView: View {
                     Button("Tambah") {
                         showAddProduct = true
                     }
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
                     .disabled(editingProduct != nil)
                 }
             }
@@ -145,19 +153,23 @@ struct ProductCard: View {
                     // Name Field
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Nama Produk")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.black)
                         
                         TextField("Masukkan nama", text: $editedProduct.name)
                             .font(.system(size: 18))
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.vertical, 8)
+                            .padding(.horizontal, 12) // Padding horizontal untuk jarak dari border
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(.systemGray6))
+                            )
                     }
                     
                     // Price Field
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Harga")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.black)
                         
                         TextField("Masukkan harga", text: Binding(
@@ -165,11 +177,13 @@ struct ProductCard: View {
                             set: { editedProduct.price = formatPrice($0) }
                         ))
                         .font(.system(size: 18))
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 12)
+                        .background(Color(.systemGray6)) // Gray background
+                        .cornerRadius(8) // Rounded corners
                         .keyboardType(.numberPad)
-                        .padding(.vertical, 8)
                     }
-                    
+                                
                     // Action Buttons
                     HStack(spacing: 16) {
                         Button(action: onDelete) {
@@ -198,16 +212,16 @@ struct ProductCard: View {
             } else {
                 // Display Mode
                 HStack {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 3) {
                         Text(product.name)
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(.primary)
                         
                         Text("Rp \(product.price)")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 19, weight: .semibold))
                             .foregroundColor(.black)
                     }
-                    .padding(.leading, 16)
+                    .padding(.leading, 20)
                     
                     Spacer()
                     
@@ -218,12 +232,12 @@ struct ProductCard: View {
                             .padding(.trailing, 16)
                     }
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 8)
             }
         }
         .frame(maxWidth: .infinity)
         .background(Color.white)
-        .cornerRadius(12)
+        .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 12)

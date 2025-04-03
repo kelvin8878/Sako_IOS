@@ -18,94 +18,75 @@ struct TambahProdukView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
+                VStack() {
                     // Header Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("INFORMASI PRODUK")
-                            .font(.system(size: 16, weight: .bold))
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Tambah Produk")
+                            .font(.system(size: 34, weight: .bold))
                             .foregroundColor(Color(.black))
-                            .padding(.horizontal, 20)
-                            .padding(.top, 8)
+                            .padding(.horizontal, 10)
+                            .padding(.top, 10)
                         
                         // Nama Produk Card
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Nama Produk")
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.primary)
+                                .padding(.horizontal, 4)
                             
                             TextField("Contoh: Nasi Goreng", text: $name)
-                                .font(.system(size: 16))
-                                .padding(14)
+                                .font(.system(size: 18))
+                                .padding(10)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray6))
+                                        .fill(Color(.white))
                                 )
+                            
+                            Text("*Maksimal 20 Karakter")
+                                .font(.system(size: 12))
+                                .foregroundColor(.gray)
+                                .italic()
+                                .padding(.horizontal, 8)
                         }
                         .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.white)
-                                .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
-                        )
                         
                         // Harga Card
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Harga")
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.primary)
+                                .padding(.horizontal, 4)
                             
                             TextField("Contoh: 15.000", text: Binding(
                                 get: { price },
                                 set: { price = formatPrice($0) }
                             ))
-                            .font(.system(size: 16))
+                            .font(.system(size: 18))
                             .keyboardType(.numberPad)
-                            .padding(14)
+                            .padding(10)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray6))
+                                    .fill(Color(.white))
                             )
+                            
+                            Text("*Hanya Angka")
+                                .font(.system(size: 12))
+                                .foregroundColor(.gray)
+                                .italic()
+                                .padding(.horizontal, 8)
                         }
                         .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.white)
-                                .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 3)
-                        )
-                    }
-                    
-                    if case .edit = mode {
-                        Button(role: .destructive) {
-                            deleteProduct()
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Text("Hapus Produk")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                            .padding(16)
-                            .background(
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(Color.red)
-                                    .shadow(color: .red.opacity(0.2), radius: 8, x: 0, y: 3)
-                            )
-                        }
-                        .padding(.horizontal, 16)
                     }
                 }
-                .padding(.vertical, 20)
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
-            .navigationTitle(mode.title)
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Batal") {
                         dismiss()
                         onDismiss()
                     }
+                    .font(.system(size:20,weight:.semibold))
                     .foregroundColor(.blue)
                 }
                 
@@ -115,7 +96,7 @@ struct TambahProdukView: View {
                         dismiss()
                         onDismiss()
                     }
-                    .fontWeight(.semibold)
+                    .font(.system(size:20,weight:.semibold))
                     .disabled(name.isEmpty || price.isEmpty)
                 }
             }
