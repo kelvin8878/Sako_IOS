@@ -14,7 +14,33 @@ struct SplashScreen: View {
     @State private var rotation: Double = 0.0
 
     var body: some View {
+        
+        //code baru (langsung revisi aja kalau butuh)
         Group {
+                    if isActive {
+                        HomeView()
+                    } else {
+                        ZStack {
+                            Color.white.edgesIgnoringSafeArea(.all)
+                            
+                            VStack(spacing: 12) {
+                                // Bigger Image Logo with Animation
+                                Image("LogoSakoPrimary")  // Logo on Asset
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 250, height: 250)  // Increase size here
+                                    .scaleEffect(scale)
+                                    .opacity(opacity)
+                                    .animation(.easeInOut(duration: 1.0), value: scale)  // Animate scale
+                                    .onAppear {
+                                        withAnimation(.easeInOut(duration: 1.0)) {
+                                            scale = 1.0
+                                            opacity = 1.0
+                                        }
+                                    }
+                
+        // code lama
+        /**Group {
             if isActive {
                 HomeView()
             } else {
@@ -54,7 +80,7 @@ struct SplashScreen: View {
                             .foregroundColor(.black)
                             .opacity(opacity)
                             .offset(y: isActive ? 0 : 20)
-                            .animation(.easeOut(duration: 1.0), value: opacity)
+                            .animation(.easeOut(duration: 1.0), value: opacity)**/
                     }
                 }
                 .onAppear {
