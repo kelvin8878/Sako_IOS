@@ -53,24 +53,16 @@ struct DataProdukView: View {
                             .textFieldStyle(.plain)
                             .padding(.vertical, 10)
                             .autocorrectionDisabled()
-                        
-                        if !searchText.isEmpty {
-                            Button(action: { searchText = "" }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                                    .padding(.trailing, 12) // Padding lebih besar untuk keseimbangan visual
-                            }
-                        }
                     }
                 }
-                .frame(height: 38) // Tinggi lebih standar untuk UI
+                .frame(height: 38)
                 .padding(.horizontal, 16)
                 .padding(.top, 12)
-                .padding(.bottom, 8)
+                .padding(.bottom, 10)
                 
                 // Product List
                 ScrollView {
-                    LazyVStack(spacing: 12) {
+                    LazyVStack(spacing: 6) {
                         ForEach(filteredProducts) { product in
                             ProductCard(
                                 product: product,
@@ -225,12 +217,15 @@ struct ProductCard: View {
                     
                     Spacer()
                     
-                    Button(action: onEdit) {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.blue)
-                            .padding(.trailing, 16)
-                    }
+                    /*
+                     AKTIFIN INI AJA KALAU MAU BISA DI EDIT *EDIT*
+                     */
+//                    Button(action: onEdit) {
+//                        Image(systemName: "pencil")
+//                            .font(.system(size: 20, weight: .bold))
+//                            .foregroundColor(.blue)
+//                            .padding(.trailing, 16)
+//                    }
                 }
                 .padding(.vertical, 8)
             }

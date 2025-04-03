@@ -128,14 +128,7 @@ struct TambahProdukView: View {
             }
         }
     }
-    
-    private func deleteProduct() {
-        if let index = products.firstIndex(where: { $0.id == (mode.product?.id ?? UUID()) }) {
-            products.remove(at: index)
-        }
-        dismiss()
-        onDismiss()
-    }
+
     
     private func formatPrice(_ price: String) -> String {
         let cleanPrice = price.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
