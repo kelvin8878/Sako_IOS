@@ -181,7 +181,7 @@ struct HomeView: View {
                                         .bold()
                                 }
                                 .padding()
-                                .background(Color.white)
+                                .background(.white)
                                 .cornerRadius(8)
                             }
                         }
