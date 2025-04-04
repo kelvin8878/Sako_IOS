@@ -25,7 +25,7 @@ struct SakoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
+            HomeView()
         }
         .modelContainer(sharedModelContainer)
     }
