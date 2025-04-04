@@ -62,7 +62,7 @@ struct DataProdukView: View {
                 
                 // Product List
                 ScrollView {
-                    LazyVStack(spacing: 6) {
+                    LazyVStack(spacing: 8) {
                         ForEach(filteredProducts) { product in
                             ProductCard(
                                 product: product,

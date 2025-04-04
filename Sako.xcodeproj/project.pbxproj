@@ -11,7 +11,9 @@
 		B636DF992D98670B00CADAD2 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B666F83A2D9BA62A0075A180 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B67531CD2D9886160036D3DF /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
+		B6A941372D9FBF50005B1048 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B6B13AB32D9F979600700E1C /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
+		B6F9C2F52D9FCCEB00758DEA /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -70,7 +72,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B6A9413A2D9FBF50005B1048 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B6B13AB82D9F979600700E1C /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B6F9C2F82D9FCCEB00758DEA /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
@@ -138,8 +150,16 @@
 					ProjectRef = B6B13AB32D9F979600700E1C /* Sako.xcodeproj */;
 				},
 				{
+					ProductGroup = B6A9413A2D9FBF50005B1048 /* Products */;
+					ProjectRef = B6A941372D9FBF50005B1048 /* Sako.xcodeproj */;
+				},
+				{
 					ProductGroup = B67531D12D9886160036D3DF /* Products */;
 					ProjectRef = B67531CD2D9886160036D3DF /* Sako.xcodeproj */;
+				},
+				{
+					ProductGroup = B6F9C2F82D9FCCEB00758DEA /* Products */;
+					ProjectRef = B6F9C2F52D9FCCEB00758DEA /* Sako.xcodeproj */;
 				},
 				{
 					ProductGroup = B666F83F2D9BA62A0075A180 /* Products */;

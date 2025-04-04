@@ -71,7 +71,7 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color(UIColor.systemGray5))
                     
-                    // Buttons Row
+                    // sButtons Row
                     HStack(spacing: 16) {
                         NavigationLink(destination: DataPenjualanView()) {
                             HStack {
