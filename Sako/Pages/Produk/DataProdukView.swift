@@ -41,7 +41,7 @@ struct DataProdukView: View {
                 
                 // Search Bar
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 16)
                         .fill(Color(.systemGray6)) // Warna abu-abu sistem yang bagus
                     
                     HStack {

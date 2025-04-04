@@ -11,12 +11,18 @@
 		B636DF992D98670B00CADAD2 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B666F83A2D9BA62A0075A180 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B67531CD2D9886160036D3DF /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
+		B6B13AB32D9F979600700E1C /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		85A057382D9382F100508FD7 /* Sako */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Sako;
+			sourceTree = "<group>";
+		};
+		B6B13AE72D9FBADC00700E1C /* DataBase */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DataBase;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +43,7 @@
 			children = (
 				85A057382D9382F100508FD7 /* Sako */,
 				85A057372D9382F100508FD7 /* Products */,
+				B6B13AE72D9FBADC00700E1C /* DataBase */,
 			);
 			sourceTree = "<group>";
 		};
@@ -63,6 +70,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B6B13AB82D9F979600700E1C /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -80,6 +92,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				85A057382D9382F100508FD7 /* Sako */,
+				B6B13AE72D9FBADC00700E1C /* DataBase */,
 			);
 			name = Sako;
 			packageProductDependencies = (
@@ -119,6 +132,10 @@
 				{
 					ProductGroup = B636DF9C2D98670B00CADAD2 /* Products */;
 					ProjectRef = B636DF992D98670B00CADAD2 /* Sako.xcodeproj */;
+				},
+				{
+					ProductGroup = B6B13AB82D9F979600700E1C /* Products */;
+					ProjectRef = B6B13AB32D9F979600700E1C /* Sako.xcodeproj */;
 				},
 				{
 					ProductGroup = B67531D12D9886160036D3DF /* Products */;
