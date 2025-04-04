@@ -139,7 +139,7 @@ struct DataPenjualanView: View {
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Total Penjualan")
-                            .font(.system(size: 16, weight: .regular))
+                            .font(.system(size: 18, weight: .regular))
                             .foregroundColor(.white)
                         
                         Text("Rp\(totalSales.formattedWithSeparator)")
@@ -161,7 +161,9 @@ struct DataPenjualanView: View {
                             HStack {
                                 Text("Order \(order.number)")
                                     .font(.system(size: 16, weight: .bold))
+                                
                                 Spacer()
+                                
                                 Text("Rp\(order.items.reduce(0) { $0 + ($1.price * $1.quantity) }.formattedWithSeparator)")
                                     .font(.system(size: 14, weight: .semibold))
                             }

@@ -76,26 +76,28 @@ struct HomeView: View {
                         NavigationLink(destination: DataPenjualanView()) {
                             HStack {
                                 Image(systemName: "dollarsign.circle.fill")
-                                    .font(.system(size: 30))
+                                    .font(.system(size: 40))
                                 Text("Data\nPenjualan")
                                     .multilineTextAlignment(.center)
+                                    .font(.system(size: 20))
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color(UIColor.systemGray6))
+                            .background(Color(UIColor.white))
                             .cornerRadius(12)
                         }
                         
                         NavigationLink(destination: DataProdukView()) {
                             HStack {
                                 Image(systemName: "shippingbox.fill")
-                                    .font(.system(size: 30))
+                                    .font(.system(size: 40))
                                 Text("Data\nProduk")
                                     .multilineTextAlignment(.center)
+                                    .font(.system(size: 20))
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color(UIColor.systemGray6))
+                            .background(Color(UIColor.white))
                             .cornerRadius(12)
                         }
                     }
@@ -110,7 +112,7 @@ struct HomeView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color(UIColor.systemGray6))
+                    .background(Color(UIColor.white))
                     .cornerRadius(12)
                     .padding(.horizontal)
                     .onTapGesture {
