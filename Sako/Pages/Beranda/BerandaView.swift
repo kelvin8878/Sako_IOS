@@ -1,13 +1,6 @@
-//
-//  ContentView.swift
-//  Sako
-//
-//  Created by Ammar Sufyan on 26/03/25.
-//
-
 import SwiftUI
 
-struct HomeView: View {
+struct BerandaView: View {
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
     @State private var showTotal = true
@@ -379,5 +372,5 @@ struct FloatingPreviewView: View {
 }
 
 #Preview {
-    HomeView()
+    BerandaView()
 }

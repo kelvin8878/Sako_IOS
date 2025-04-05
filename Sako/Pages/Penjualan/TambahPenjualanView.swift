@@ -1,10 +1,3 @@
-//
-//  TambahPenjualanView.swift
-//  Sako
-//
-//  Created by Ammar Sufyan on 30/03/25.
-//
-
 import SwiftUI
 
 struct TambahPenjualanView: View {
