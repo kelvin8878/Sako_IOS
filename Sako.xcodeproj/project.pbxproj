@@ -6,9 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B666C8152DA17C2A00296D04 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B666C80A2DA17C2A00296D04 /* Item.swift */; };
+		B666C8162DA17C2A00296D04 /* SakoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B666C80D2DA17C2A00296D04 /* SakoApp.swift */; };
+		B666C8192DA17C2A00296D04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B666C80B2DA17C2A00296D04 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8563EA742DA0110200BCD60B /* Sako.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sako.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B636DF992D98670B00CADAD2 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
+		B666C80A2DA17C2A00296D04 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		B666C80B2DA17C2A00296D04 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B666C80C2DA17C2A00296D04 /* Sako 2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "Sako 2.xcodeproj"; sourceTree = "<group>"; };
+		B666C80D2DA17C2A00296D04 /* SakoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SakoApp.swift; sourceTree = "<group>"; };
 		B666F83A2D9BA62A0075A180 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B67531CD2D9886160036D3DF /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B6A941372D9FBF50005B1048 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
@@ -40,6 +50,10 @@
 			children = (
 				85A057382D9382F100508FD7 /* Sako */,
 				8563EA742DA0110200BCD60B /* Sako.app */,
+				B666C80A2DA17C2A00296D04 /* Item.swift */,
+				B666C80B2DA17C2A00296D04 /* LaunchScreen.storyboard */,
+				B666C80C2DA17C2A00296D04 /* Sako 2.xcodeproj */,
+				B666C80D2DA17C2A00296D04 /* SakoApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -163,6 +177,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B666C8192DA17C2A00296D04 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +188,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B666C8152DA17C2A00296D04 /* Item.swift in Sources */,
+				B666C8162DA17C2A00296D04 /* SakoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
