@@ -64,17 +64,35 @@ struct DataProdukView: View {
             .background(Color.white)
             
             // 📦 List Produk with gray background
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(filteredProducts) { product in
-                        ProductCardView(product: product)
-                            .background(Color.white)
-                            .cornerRadius(8)
-                    }
+            if filteredProducts.isEmpty {
+                // Empty State View
+                VStack(spacing: 12) {
+                    Image(systemName: "shippingbox.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.gray)
+                    
+                    Text("Belum ada produk")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.gray)
                 }
-                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(filteredProducts) { product in
+                            ProductCardView(product: product)
+                                .background(Color.white)
+                                .cornerRadius(8)
+                        }
+                    }
+                    .padding()
+                }
+                .background(Color(.white))
             }
-            .background(Color(.systemGray6))
         }
         .sheet(isPresented: $showTambahProduk) {
             TambahProdukView()
