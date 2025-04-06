@@ -45,7 +45,7 @@ struct DataPenjualanView: View {
                 Spacer()
 
                 Button {
-                    // TODO: Tambah penjualan modal
+                    //
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "plus")
