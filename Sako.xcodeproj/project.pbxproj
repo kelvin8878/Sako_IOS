@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		8563EA742DA0110200BCD60B /* Sako.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Sako.app; path = "/Users/ammarsufyan/GitHub/Sako/build/Debug-iphoneos/Sako.app"; sourceTree = "<absolute>"; };
+		85F72CFD2DA252D000C7818C /* Sako.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sako.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B636DF992D98670B00CADAD2 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B666F83A2D9BA62A0075A180 /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
 		B67531CD2D9886160036D3DF /* Sako.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Sako.xcodeproj; sourceTree = "<group>"; };
@@ -39,6 +39,7 @@
 			isa = PBXGroup;
 			children = (
 				85A057382D9382F100508FD7 /* Sako */,
+				85F72CFD2DA252D000C7818C /* Sako.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,7 +95,7 @@
 			packageProductDependencies = (
 			);
 			productName = Sako;
-			productReference = 8563EA742DA0110200BCD60B /* Sako.app */;
+			productReference = 85F72CFD2DA252D000C7818C /* Sako.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
