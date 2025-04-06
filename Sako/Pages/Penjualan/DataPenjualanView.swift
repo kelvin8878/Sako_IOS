@@ -136,6 +136,8 @@ struct DataPenjualanView: View {
 
             Spacer()
         }
+        .navigationBarBackButtonHidden(true)
+        .padding(.top)
     }
 }
 
