@@ -3,111 +3,100 @@ import SwiftData
 
 struct TambahPenjualanView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var context
-    @Query var products: [Product]
+    @Environment(\.modelContext) private var context
+    @Query private var allProducts: [Product]
+    
+    @State private var selectedItems: [Product: Int] = [:]
+    @State private var searchText = ""
+    @State private var showConfirmationSheet = false
 
-    @State private var selectedProducts: [SelectedProduct] = []
-    @State private var showKonfirmasi: Bool = false
+    var filteredProducts: [Product] {
+        if searchText.isEmpty {
+            return allProducts
+        }
+        return allProducts.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    }
+
+    var totalItems: Int {
+        selectedItems.values.reduce(0, +)
+    }
+
+    var totalPrice: Double {
+        selectedItems.reduce(0) { $0 + (Double($1.value) * $1.key.price) }
+    }
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Header
+        VStack(spacing: 0) {
+            // 🔙 Header
             HStack {
                 Button("Batal") { dismiss() }
                     .foregroundColor(.blue)
-
                 Spacer()
-
-                Text("Tambah Penjualan")
-                    .font(.headline)
-
-                Spacer()
-
-                // Placeholder untuk spacing seimbang
-                Text("     ")
             }
             .padding(.horizontal)
+            .padding(.top)
 
-            // Daftar produk
-            List {
-                ForEach(products) { product in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(product.name)
-                            Text("Rp\(Int(product.price).formattedWithSeparator())")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
+            Text("Tambah Penjualan")
+                .font(.system(size: 34, weight: .bold))
+                .padding(.horizontal)
 
-                        Spacer()
-
-                        if let index = selectedProducts.firstIndex(where: { $0.product.id == product.id }) {
-                            HStack(spacing: 12) {
-                                Button(action: {
-                                    if selectedProducts[index].quantity > 1 {
-                                        selectedProducts[index].quantity -= 1
-                                    } else {
-                                        selectedProducts.remove(at: index)
-                                    }
-                                }) {
-                                    Image(systemName: "minus.circle.fill")
-                                        .foregroundColor(.red)
-                                }
-
-                                Text("\(selectedProducts[index].quantity)")
-                                    .frame(minWidth: 20)
-
-                                Button(action: {
-                                    selectedProducts[index].quantity += 1
-                                }) {
-                                    Image(systemName: "plus.circle.fill")
-                                        .foregroundColor(.green)
-                                }
-                            }
-                        } else {
-                            Button("Tambah") {
-                                selectedProducts.append(SelectedProduct(product: product, quantity: 1))
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    .padding(.vertical, 6)
-                }
+            // 🔍 Search Field
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Cari Produk", text: $searchText)
+                    .font(.body)
             }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+            .padding(.horizontal)
 
-            // Tombol konfirmasi
-            if !selectedProducts.isEmpty {
-                Button {
-                    showKonfirmasi = true
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("Konfirmasi Penjualan")
-                            .foregroundColor(.white)
-                            .padding()
-                        Spacer()
+            // 📋 Product List
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    ForEach(filteredProducts) { product in
+                        ProductRowCardView(product: product, quantity: selectedItems[product] ?? 0) { newQty in
+                            if newQty == 0 {
+                                selectedItems.removeValue(forKey: product)
+                            } else {
+                                selectedItems[product] = newQty
+                            }
+                        }
                     }
-                    .background(Color.green)
-                    .cornerRadius(12)
                 }
                 .padding()
             }
-        }
-        .sheet(isPresented: $showKonfirmasi) {
-            KonfirmasiPenjualanView(selectedProducts: selectedProducts) {
-                dismiss() // Tutup TambahPenjualanView setelah simpan
+
+            // ✅ Confirm Bar
+            if totalItems > 0 {
+                Button {
+                    showConfirmationSheet = true
+                } label: {
+                    HStack {
+                        Label("\(totalItems) Item", systemImage: "basket.fill")
+                        Spacer()
+                        Text("Rp\(Int(totalPrice).formattedWithSeparator())")
+                    }
+                    .font(.system(size: 20, weight: .bold))
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(16)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .sheet(isPresented: $showConfirmationSheet) {
+            KonfirmasiPenjualanView(
+                selectedItems: selectedItems,
+                onSave: {
+                    selectedItems = [:] // 🧼 reset after save
+                    dismiss()
+                }
+            )
+        }
     }
-}
-
-// MARK: - SelectedProduct (Local Model)
-struct SelectedProduct: Identifiable {
-    var id: UUID { product.id }
-    let product: Product
-    var quantity: Int
-}
-
-#Preview {
-    TambahPenjualanView()
 }

@@ -4,8 +4,8 @@ import SwiftData
 struct DataPenjualanView: View {
     @Environment(\.dismiss) var dismiss
     @Query var sales: [Sale]
-
     @State private var selectedDate: Date = Date()
+    @State private var showTambahPenjualan = false
     @State private var searchText: String = ""
 
     private var dateFormatter: DateFormatter {
@@ -45,7 +45,7 @@ struct DataPenjualanView: View {
                 Spacer()
 
                 Button {
-                    //
+                    showTambahPenjualan = true
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "plus")
@@ -136,8 +136,11 @@ struct DataPenjualanView: View {
 
             Spacer()
         }
+        .sheet(isPresented: $showTambahPenjualan) {
+            TambahPenjualanView()
+                .presentationDetents([.large])
+        }
         .navigationBarBackButtonHidden(true)
-        .padding(.top)
     }
 }
 

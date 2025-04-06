@@ -2,78 +2,110 @@ import SwiftUI
 import SwiftData
 
 struct KonfirmasiPenjualanView: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var context
+    @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
 
-    let selectedProducts: [SelectedProduct]
-    var onSimpan: () -> Void
+    let selectedItems: [Product: Int]
+    let onSave: () -> Void
 
-    var totalHarga: Double {
-        selectedProducts.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
-    }
+    @State private var isSaving = false
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Header
-            HStack {
-                Button("Kembali") {
-                    dismiss()
-                }
-                .foregroundColor(.blue)
-
-                Spacer()
-
-                Text("Konfirmasi")
-                    .font(.headline)
-
-                Spacer()
-                Text("     ")
-            }
-            .padding(.horizontal)
-
-            // Ringkasan produk
-            List {
-                ForEach(selectedProducts) { item in
-                    HStack {
-                        Text(item.product.name)
-                        Spacer()
-                        Text("\(item.quantity) × Rp\(Int(item.product.price).formattedWithSeparator())")
+        NavigationStack {
+            VStack(spacing: 16) {
+                // 🧾 List Produk yang Dipilih
+                List {
+                    ForEach(Array(selectedItems.keys), id: \.id) { product in
+                        let quantity = selectedItems[product] ?? 0
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(product.name)
+                                    .font(.headline)
+                                Text("Rp\(Int(product.price).formattedWithSeparator()) × \(quantity)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Text("Rp\(Int(product.price * Double(quantity)).formattedWithSeparator())")
+                                .bold()
+                        }
+                        .padding(.vertical, 8)
                     }
                 }
+                .listStyle(.plain)
 
+                // 💰 Total
                 HStack {
                     Text("Total")
-                        .fontWeight(.bold)
+                        .font(.title3)
+                        .bold()
                     Spacer()
-                    Text("Rp\(Int(totalHarga).formattedWithSeparator())")
-                        .fontWeight(.bold)
+                    Text("Rp\(totalHarga.formattedWithSeparator())")
+                        .font(.title2)
+                        .bold()
                 }
+                .padding(.horizontal)
+
+                // ✅ Tombol Simpan
+                Button {
+                    saveTransaction()
+                } label: {
+                    HStack {
+                        Spacer()
+                        if isSaving {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        } else {
+                            Label("Simpan", systemImage: "checkmark.circle.fill")
+                                .font(.title2)
+                                .bold()
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                }
+                .disabled(isSaving)
+
+                Spacer()
             }
+            .navigationTitle("Konfirmasi")
+        }
+    }
 
-            // Tombol simpan
-            Button {
-                let sale = Sale(date: Date())
-                for item in selectedProducts {
-                    sale.addProduct(product: item.product, quantity: item.quantity)
-                }
+    // MARK: - Total Harga
+    private var totalHarga: Double {
+        selectedItems.reduce(0) { result, entry in
+            let (product, quantity) = entry
+            return result + (product.price * Double(quantity))
+        }
+    }
 
-                context.insert(sale)
-                try? context.save()
+    // MARK: - Simpan Transaksi
+    private func saveTransaction() {
+        guard !isSaving else { return }
+        isSaving = true
 
-                dismiss()
-                onSimpan()
-            } label: {
-                HStack {
-                    Spacer()
-                    Text("Simpan Penjualan")
-                        .foregroundColor(.white)
-                        .padding()
-                    Spacer()
-                }
-                .background(Color.blue)
-                .cornerRadius(12)
-            }
-            .padding()
+        let sale = Sale(date: .now)
+
+        for (product, quantity) in selectedItems where quantity > 0 {
+            let item = ProductOnSale(product: product, quantity: quantity, priceAtSale: product.price)
+            sale.items.append(item)
+        }
+
+        context.insert(sale)
+
+        do {
+            try context.save()
+            isSaving = false
+            onSave()
+            dismiss()
+        } catch {
+            print("❌ Gagal menyimpan transaksi:", error.localizedDescription)
+            isSaving = false
         }
     }
 }
