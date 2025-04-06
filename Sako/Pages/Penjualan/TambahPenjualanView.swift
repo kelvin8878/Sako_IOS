@@ -26,7 +26,7 @@ struct TambahPenjualanView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 16) {
             // 🔙 Header
             HStack {
                 Button("Batal") { dismiss() }

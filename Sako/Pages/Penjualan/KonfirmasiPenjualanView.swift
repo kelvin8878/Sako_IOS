@@ -11,8 +11,20 @@ struct KonfirmasiPenjualanView: View {
     @State private var isSaving = false
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 16) {
+                // 🔙 Header
+                HStack {
+                    Button("Batal") { dismiss() }
+                        .foregroundColor(.blue)
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top)
+
+                Text("Konfirmasi Penjualan")
+                    .font(.system(size: 34, weight: .bold))
+                    .padding(.horizontal)
+                
                 // 🧾 List Produk yang Dipilih
                 List {
                     ForEach(Array(selectedItems.keys), id: \.id) { product in
@@ -72,9 +84,7 @@ struct KonfirmasiPenjualanView: View {
 
                 Spacer()
             }
-            .navigationTitle("Konfirmasi")
         }
-    }
 
     // MARK: - Total Harga
     private var totalHarga: Double {
