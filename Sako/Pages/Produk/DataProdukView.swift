@@ -57,11 +57,11 @@ struct DataProdukView: View {
                         .autocorrectionDisabled()
                 }
                 .padding(10)
-                .background(Color(.systemGray6))
+                .background(Color(.systemGray5))
                 .cornerRadius(12)
                 .padding(.horizontal)
             }
-            .background(Color.white)
+            .background(Color(.systemGray6))
             
             // 📦 List Produk with gray background
             if filteredProducts.isEmpty {
@@ -79,7 +79,7 @@ struct DataProdukView: View {
                         .foregroundColor(.gray)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.white)
+                .background(Color(.systemGray6))
             } else {
                 ScrollView {
                     LazyVStack(spacing: 12) {
@@ -91,9 +91,10 @@ struct DataProdukView: View {
                     }
                     .padding()
                 }
-                .background(Color(.white))
+                .background(Color(.systemGray6))
             }
         }
+        .background(Color(.systemGray6))
         .sheet(isPresented: $showTambahProduk) {
             TambahProdukView()
                 .presentationDetents([.large])

@@ -8,6 +8,7 @@ struct TambahProdukView: View {
     
     @State private var name: String = ""
     @State private var price: String = ""
+    @State private var priceError: String? = nil
     @State private var nameError: String? = nil
     
     var body: some View {
@@ -74,7 +75,20 @@ struct TambahProdukView: View {
                             .background(Color(.systemBackground))
                             .cornerRadius(10)
                             .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
+                            .onChange(of: price) { _, newValue in
+                                    price = formatCurrencyInput(newValue)
+                                    validatePrice()
+                            }
                         
+                        if let error = priceError {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        } else {
+                            Text("* Gunakan angka saja (contoh: 15,000 atau 15000)")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                        }
                         Text("* Masukkan hanya angka")
                             .font(.caption)
                             .foregroundColor(.gray)
@@ -131,13 +145,47 @@ struct TambahProdukView: View {
             return true
         }
     }
-
-    private func simpanProduk() {
-        guard let harga = Double(price) else { return }
+    
+    private func formatCurrencyInput(_ input: String) -> String {
+            // Hapus semua karakter non-digit kecuali koma
+            let filtered = input.filter { $0.isNumber || $0 == "," }
+            
+            // Ganti koma dengan titik untuk decimal separator
+            let withDecimalSeparator = filtered.replacingOccurrences(of: ",", with: ".")
+            
+            // Hapus multiple decimal separators
+            let components = withDecimalSeparator.components(separatedBy: ".")
+            if components.count > 2 {
+                return components[0] + "." + components[1]
+            }
+            
+            return withDecimalSeparator
+        }
         
-        let newProduct = Product(name: name, price: harga)
-        context.insert(newProduct)
-        try? context.save()
-        dismiss()
-    }
+        // Validasi harga
+        private func validatePrice() {
+            let cleanedPrice = price.replacingOccurrences(of: ",", with: ".")
+            
+            if cleanedPrice.isEmpty {
+                priceError = "Harga tidak boleh kosong"
+            } else if Double(cleanedPrice) == nil {
+                priceError = "Format harga tidak valid"
+            } else if Double(cleanedPrice)! <= 0 {
+                priceError = "Harga harus lebih dari 0"
+            } else {
+                priceError = nil
+            }
+        }
+    
+    private func simpanProduk() {
+            guard validateName() else { return }
+            
+            let cleanedPrice = price.replacingOccurrences(of: ",", with: ".")
+            guard let harga = Double(cleanedPrice) else { return }
+            
+            let newProduct = Product(name: name, price: harga)
+            context.insert(newProduct)
+            try? context.save()
+            dismiss()
+        }
 }

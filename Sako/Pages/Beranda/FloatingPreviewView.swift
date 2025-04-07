@@ -35,7 +35,7 @@ struct FloatingPreviewView: View {
                 Divider()
 
                 HStack {
-                    Text("Nilai:")
+                    Text("Total Harga:")
                     Spacer()
                     Text("Rp\(product.value.formatted())")
                         .bold()
