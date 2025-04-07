@@ -6,36 +6,9 @@ struct MonthYearPickerView: View {
     
     var body: some View {
         VStack {
-            Text("Pilih Bulan dan Tahun")
-                .font(.headline)
-                .padding(.top)
-            
             MonthYearPicker(selectedDate: $selectedDate)
-                .frame(height: 200)
-            
-            HStack {
-                Button("Batal") {
-                    isPresented = false
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(UIColor.systemGray5))
-                .foregroundColor(.black)
-                .cornerRadius(10)
-                
-                Button("Selesai") {
-                    isPresented = false
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-            }
-            .padding(.horizontal)
-            .padding(.bottom)
         }
-        .presentationDetents([.height(300)])
+        .presentationDetents([.height(200)])
     }
 }
 
