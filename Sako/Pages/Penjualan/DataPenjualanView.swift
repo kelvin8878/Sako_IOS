@@ -57,7 +57,7 @@ struct DataPenjualanView: View {
             .padding(.horizontal)
 
             // 🏷️ Judul manual
-            Text("Data Penjualan")
+            Text("Kelola Penjualan")
                 .font(.system(size: 28, weight: .bold))
                 .padding(.horizontal)
 
@@ -80,7 +80,7 @@ struct DataPenjualanView: View {
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-                .background(Color(.systemGray6))
+                .background(Color(.systemGray5))
                 .cornerRadius(12)
             }
             .padding(.horizontal)
@@ -130,12 +130,14 @@ struct DataPenjualanView: View {
                             .listRowBackground(Color.clear)
                     }
                 }
+                .foregroundColor(Color(.systemGray6))
                 .listStyle(.plain)
                 .padding(.horizontal)
             }
 
             Spacer()
         }
+        .background(Color(.systemGray6))
         .sheet(isPresented: $showTambahPenjualan) {
             TambahPenjualanView()
                 .presentationDetents([.large])

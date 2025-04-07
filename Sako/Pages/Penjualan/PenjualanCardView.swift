@@ -12,20 +12,23 @@ struct PenjualanCardView: View {
             HStack {
                 Text("Pesanan \(index + 1)")
                     .font(.headline)
+                    .foregroundColor(.black)
 
                 Spacer()
 
                 Text("Rp\(Int(sale.totalPrice).formattedWithSeparator())")
                     .font(.headline)
+                    .foregroundColor(.black)
             }
                 
             // Items
             ForEach(showAllItems ? sale.items : Array(sale.items.prefix(3)), id: \.id) { item in
                 HStack {
                     Text(item.product.name)
+                        .foregroundColor(.black)
                     Spacer()
                     Text("\(item.quantity)x")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
                 }
             }
 
@@ -52,7 +55,7 @@ struct PenjualanCardView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color(.white))
         .cornerRadius(12)
     }
 }

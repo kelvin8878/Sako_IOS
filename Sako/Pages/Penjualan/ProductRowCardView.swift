@@ -52,7 +52,7 @@ struct ProductRowCardView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color(.white))
         .cornerRadius(12)
     }
 }
