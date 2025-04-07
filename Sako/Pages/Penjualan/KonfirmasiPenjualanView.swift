@@ -44,7 +44,9 @@ struct KonfirmasiPenjualanView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                .listStyle(.plain)
+                .padding(.horizontal, 10)
+                .cornerRadius(16)
+            
 
                 // 💰 Total
                 HStack {
@@ -55,6 +57,7 @@ struct KonfirmasiPenjualanView: View {
                     Text("Rp\(totalHarga.formattedWithSeparator())")
                         .font(.title2)
                         .bold()
+
                 }
                 .padding(.horizontal)
 
@@ -68,7 +71,7 @@ struct KonfirmasiPenjualanView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Label("Simpan", systemImage: "checkmark.circle.fill")
+                            Text("Simpan")
                                 .font(.title2)
                                 .bold()
                         }
@@ -84,6 +87,7 @@ struct KonfirmasiPenjualanView: View {
 
                 Spacer()
             }
+        .background(Color(.systemGray6))
         }
 
     // MARK: - Total Harga
