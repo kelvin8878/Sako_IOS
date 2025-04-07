@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import TipKit
 
 struct ChartSegment {
     var name: String
@@ -18,6 +19,8 @@ struct BerandaView: View {
     @State private var selectedProduct: (name: String, value: Int, color: Color)? = nil
     @State private var showFloatingPreview = false
     @State private var previewPosition: CGPoint = .zero
+    
+    let dataProdukTip = DataProdukTip()
 
     let colors: [Color] = [.red, .blue, .orange, .green, .purple, .yellow, .pink, .indigo, .teal, .mint]
 
@@ -86,9 +89,15 @@ struct BerandaView: View {
                         NavigationLink(destination: DataPenjualanView()) {
                             shortcutCard(icon: "dollarsign.circle.fill", title: "Data\nPenjualan")
                         }
+                        
+                        
+                        
                         NavigationLink(destination: DataProdukView()) {
                             shortcutCard(icon: "shippingbox.fill", title: "Data\nProduk")
                         }
+                        
+                        //Tip data produk
+                        .popoverTip(dataProdukTip)
                     }
                     .padding(.horizontal)
 
@@ -202,4 +211,19 @@ struct BerandaView: View {
         .background(Color.white)
         .cornerRadius(12)
     }
+}
+
+
+//buat view canvas
+#Preview {
+    BerandaView()
+       
+        //untuk munculin tips
+        .task {
+            try? Tips.configure([
+              //display untuk seberapa sering tips muncul
+               // .displayFrequency(.immediate)
+                .datastoreLocation(.applicationDefault)
+            ])
+        }
 }

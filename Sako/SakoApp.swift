@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import TipKit
 
 @main
 struct SakoApp: App {
@@ -21,6 +22,15 @@ struct SakoApp: App {
     var body: some Scene {
         WindowGroup {
             BerandaView()
+               
+                //untuk munculin tips
+                .task {
+                    try? Tips.configure([
+                      //display untuk seberapa sering tips muncul
+                       // .displayFrequency(.immediate)
+                        .datastoreLocation(.applicationDefault)
+                    ])
+                }
         }
         .modelContainer(sharedModelContainer)
     }
