@@ -8,6 +8,8 @@ struct DataPenjualanView: View {
     @State private var showTambahPenjualan = false
     @State private var searchText: String = ""
 
+
+    
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -16,8 +18,10 @@ struct DataPenjualanView: View {
 
     private var totalPenjualan: Double {
         filteredSales.reduce(0) { $0 + $1.totalPrice }
+        
     }
-
+    
+    
     // Filtered berdasarkan tanggal & search
     private var filteredSales: [Sale] {
         sales.filter { sale in
@@ -66,6 +70,7 @@ struct DataPenjualanView: View {
                 DatePicker(
                     "",
                     selection: $selectedDate,
+                    in: ...Date(),
                     displayedComponents: .date
                 )
                 .datePickerStyle(.compact)
@@ -75,7 +80,8 @@ struct DataPenjualanView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.blue)
-                    TextField("Cari Penjualan", text: $searchText)
+                    TextField("Cari Pesanan", text: $searchText)
+                        .autocorrectionDisabled()
                         .font(.callout)
                 }
                 .padding(.horizontal)
@@ -94,11 +100,13 @@ struct DataPenjualanView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Total Penjualan")
-                        .font(.subheadline)
+                        .font(.headline)
                         .foregroundColor(.white)
+                    
                     Text("Rp\(Int(totalPenjualan).formattedWithSeparator())")
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(.white)
+  
                 }
 
                 Spacer()
@@ -130,9 +138,9 @@ struct DataPenjualanView: View {
                             .listRowBackground(Color.clear)
                     }
                 }
+                .padding(.horizontal,0)
                 .foregroundColor(Color(.systemGray6))
                 .listStyle(.plain)
-                .padding(.horizontal)
             }
 
             Spacer()

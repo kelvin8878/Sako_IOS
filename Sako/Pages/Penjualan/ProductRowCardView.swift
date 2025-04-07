@@ -13,7 +13,7 @@ struct ProductRowCardView: View {
 
             HStack {
                 Text("Rp\(Int(product.price).formattedWithSeparator())")
-                    .font(.subheadline)
+                    .font(.subheadline).bold()
                     .foregroundColor(.gray)
 
                 Spacer()
@@ -30,7 +30,7 @@ struct ProductRowCardView: View {
 
                         Text("\(quantity)")
                             .font(.body)
-                            .frame(width: 24)
+                            .frame(width: 30)
 
                         Button {
                             onQuantityChange(quantity + 1)

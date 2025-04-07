@@ -37,17 +37,17 @@ struct TambahPenjualanView: View {
             .padding(.top)
 
             Text("Tambah Penjualan")
-                .font(.system(size: 34, weight: .bold))
+                .font(.system(size: 28, weight: .bold))
                 .padding(.horizontal)
 
             // 🔍 Search Field
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
-                TextField("Cari Produk", text: $searchText)
-                    .font(.body)
+                TextField("Cari produk...", text: $searchText)
+                    .autocorrectionDisabled()
             }
-            .padding()
+            .padding(10)
             .background(Color(.systemGray5))
             .cornerRadius(12)
             .padding(.horizontal)
@@ -95,7 +95,7 @@ struct TambahPenjualanView: View {
                 selectedItems: selectedItems,
                 onSave: {
                     selectedItems = [:] // 🧼 reset after save
-                    dismiss()
+//                    dismiss()
                 }
             )
         }

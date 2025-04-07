@@ -7,13 +7,13 @@ struct ProductCardView: View {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
                 Text(product.name)
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.headline).bold()
                     .lineLimit(1)
                     .foregroundColor(.black)
                 
                 Text(formatPrice(product.price))
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black)
+                    .font(.subheadline).bold()
+                    .foregroundColor(.gray)
             }
             .padding(.vertical, 10)
             
@@ -36,6 +36,6 @@ struct ProductCardView: View {
         formatter.currencySymbol = "Rp"
         formatter.maximumFractionDigits = 0
         formatter.locale = Locale(identifier: "id_ID")
-        return formatter.string(from: NSNumber(value: price)) ?? "Rp\(Int(price))"
+        return formatter.string(from: NSNumber(value: price)) ?? "Rp \(Int(price))"
     }
 }
