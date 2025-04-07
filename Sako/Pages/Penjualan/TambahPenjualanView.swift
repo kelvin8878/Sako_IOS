@@ -48,7 +48,7 @@ struct TambahPenjualanView: View {
                     .font(.body)
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color(.systemGray5))
             .cornerRadius(12)
             .padding(.horizontal)
 
@@ -89,6 +89,7 @@ struct TambahPenjualanView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .background(Color(.systemGray6))
         .sheet(isPresented: $showConfirmationSheet) {
             KonfirmasiPenjualanView(
                 selectedItems: selectedItems,

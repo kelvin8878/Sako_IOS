@@ -38,10 +38,10 @@ struct TambahProdukView: View {
             
             // 📄 Input Field
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 20) {
                     // Nama Produk
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Nama Produk")
+                        Text("  Nama Produk")
                             .font(.headline)
                         TextField("Contoh: Nasi Goreng", text: $name)
                             .textFieldStyle(.plain)
@@ -57,16 +57,16 @@ struct TambahProdukView: View {
                             Text(error)
                                 .font(.caption)
                                 .foregroundColor(.red)
-                        } else {
-                            Text("* Maksimal 25 karakter")
-                                .font(.caption)
-                                .foregroundColor(.gray)
                         }
+                        Text("  Maksimal 25 karakter")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        
                     }
                     
                     // Harga Produk
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Harga")
+                        Text("  Harga")
                             .font(.headline)
                         TextField("Contoh: 15000", text: $price)
                             .keyboardType(.decimalPad)
@@ -84,12 +84,8 @@ struct TambahProdukView: View {
                             Text(error)
                                 .font(.caption)
                                 .foregroundColor(.red)
-                        } else {
-                            Text("* Gunakan angka saja (contoh: 15,000 atau 15000)")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
                         }
-                        Text("* Masukkan hanya angka")
+                        Text("  Masukkan hanya angka")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }

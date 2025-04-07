@@ -82,18 +82,18 @@ struct BerandaView: View {
                         .font(.title2).bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        .background(Color(UIColor.systemGray5))
+                        .background(Color(UIColor.systemGray6))
 
                     // Shortcut Buttons
                     HStack(spacing: 16) {
                         NavigationLink(destination: DataPenjualanView()) {
-                            shortcutCard(icon: "dollarsign.circle.fill", title: "Data\nPenjualan")
+                            shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
                         }
                         
                         
                         
                         NavigationLink(destination: DataProdukView()) {
-                            shortcutCard(icon: "shippingbox.fill", title: "Data\nProduk")
+                            shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
                         }
                         
                         //Tip data produk
@@ -187,9 +187,10 @@ struct BerandaView: View {
                         .padding(.horizontal)
                     }
                     .padding(.bottom)
+                    
                 }
-                .background(Color(UIColor.systemGray5))
             }
+            .background(Color(UIColor.systemGray6))
             .sheet(isPresented: $showDatePicker) {
                 MonthYearPickerView(selectedDate: $selectedDate, isPresented: $showDatePicker)
             }

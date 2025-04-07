@@ -45,7 +45,7 @@ struct DataProdukView: View {
             // �️ White background for title and search
             VStack(alignment: .leading, spacing: 12) {
                 // 🏷️ Judul
-                Text("Data Produk")
+                Text("Kelola Produk")
                     .font(.system(size: 28, weight: .bold))
                     .padding(.horizontal)
                 
