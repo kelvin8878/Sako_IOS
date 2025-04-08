@@ -7,16 +7,17 @@ struct TambahProdukView: View {
     @Query private var products: [Product]
     
     @State private var name: String = ""
-    @State private var price: String = ""
+    @State private var priceInput: String = "" // Untuk input user
+    @State private var formattedPrice: String = "" // Untuk display dengan separator
     @State private var priceError: String? = nil
     @State private var nameError: String? = nil
     
-    private let currencyFormatter: NumberFormatter = {
+    private let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = "."
-        formatter.decimalSeparator = ","
-        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = ""
+        formatter.maximumFractionDigits = 0
         return formatter
     }()
     
@@ -80,19 +81,27 @@ struct TambahProdukView: View {
                         Text("Harga")
                             .font(.headline)
                             .padding(.horizontal, 5)
-                        TextField("Contoh: 15.000", text: $price)
+                        TextField("Contoh: 15.000", text: $formattedPrice)
                             .autocorrectionDisabled()
-                            .keyboardType(.decimalPad)
+                            .keyboardType(.numberPad)
                             .textFieldStyle(.plain)
                             .padding()
                             .background(Color(.systemBackground))
                             .cornerRadius(10)
                             .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
-                            .onChange(of: price) { _, newValue in
-                                let formatted = formatCurrencyInput(newValue)
-                                if formatted != newValue {
-                                    price = formatted
+                            .onChange(of: formattedPrice) { oldValue, newValue in
+                                let filtered = newValue.filter { $0.isNumber }
+                                
+                                // Simpan nilai asli tanpa format
+                                priceInput = filtered
+                                
+                                // Format ulang untuk display
+                                if let number = Int(filtered) {
+                                    formattedPrice = numberFormatter.string(from: NSNumber(value: number)) ?? filtered
+                                } else {
+                                    formattedPrice = filtered
                                 }
+                                
                                 validatePrice()
                             }
                         
@@ -102,7 +111,7 @@ struct TambahProdukView: View {
                                 .foregroundColor(.red)
                                 .padding(.horizontal, 5)
                         }
-                        Text("Hanya input angka")
+                        Text("Input angka (akan diformat otomatis)")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .padding(.horizontal, 5)
@@ -136,58 +145,33 @@ struct TambahProdukView: View {
     }
     
     private var canSave: Bool {
-        !name.isEmpty && !price.isEmpty && nameError == nil && priceError == nil
-    }
-    
-    private func formatCurrencyInput(_ input: String) -> String {
-        // Biarkan input "0" tetap bisa dihapus
-        if input == "0" {
-            return "0"
-        }
-        
-        // Bersihkan input dari karakter non-digit dan simpan koma jika ada
-        let cleaned = input.filter { $0.isNumber || $0 == "," }
-        
-        // Jika setelah dibersihkan kosong, return string kosong
-        if cleaned.isEmpty {
-            return ""
-        }
-        
-        // Pisahkan bagian integer dan decimal
-        let components = cleaned.components(separatedBy: ",")
-        var integerPart = components[0]
-        let decimalPart = components.count > 1 ? "," + components[1] : ""
-        
-        // Hapus leading zeros hanya jika angka lebih dari 1 digit
-        if integerPart.count > 1 {
-            integerPart = integerPart.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
-            if integerPart.isEmpty { integerPart = "0" }
-        }
-        
-        // Format bagian integer dengan separator ribuan
-        if let number = Int(integerPart) {
-            let formatted = currencyFormatter.string(from: NSNumber(value: number)) ?? integerPart
-            // Jika hasil formatting "0" dan input asli "0", biarkan
-            return formatted == "0" && input == "0" ? "0" : formatted + decimalPart
-        }
-        
-        return integerPart + decimalPart
+        !name.isEmpty && !priceInput.isEmpty && nameError == nil && priceError == nil
     }
     
     @discardableResult
     private func validateName() -> Bool {
-        if name.isEmpty {
+        
+//        // Trim whitespace dari input
+//        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if name.isEmpty  {
             nameError = nil
             return false
         }
         
         let isDuplicate = products.contains { $0.name.lowercased() == name.lowercased() }
         
-        if isDuplicate {
+        if name.first?.isWhitespace == true {
+            nameError = "Nama tidak boleh diawali spasi"
+            return false
+        } else if isDuplicate {
             nameError = "Nama produk sudah ada"
             return false
         } else if name.count > 25 {
             nameError = "Nama melebihi 25 karakter"
+            return false
+        } else if name.rangeOfCharacter(from: .whitespacesAndNewlines.inverted) == nil {
+            nameError = "Nama produk tidak valid"
             return false
         } else {
             nameError = nil
@@ -196,26 +180,24 @@ struct TambahProdukView: View {
     }
         
     private func validatePrice() {
-        let cleanedPrice = price.replacingOccurrences(of: ".", with: "")
-                              .replacingOccurrences(of: ",", with: ".")
-        
-        if cleanedPrice.isEmpty {
+        if priceInput.isEmpty {
             priceError = nil
             return
         }
         
-        guard let priceValue = Double(cleanedPrice) else {
+        if priceInput.hasPrefix("0") && priceInput.count > 1 {
+            priceError = "Harga tidak boleh dimulai dengan 0"
+            return
+        }
+        
+        guard let priceValue = Int(priceInput) else {
             priceError = "Format harga tidak valid"
             return
         }
         
-        if cleanedPrice.hasPrefix("0") && cleanedPrice.count > 1 && !cleanedPrice.hasPrefix("0.") {
-            priceError = "Harga tidak boleh dimulai dengan 0"
-        }
-        else if priceValue <= 0 {
+        if priceValue <= 0 {
             priceError = "Harga harus lebih dari 0"
-        }
-        else {
+        } else {
             priceError = nil
         }
     }
@@ -223,12 +205,9 @@ struct TambahProdukView: View {
     private func simpanProduk() {
         guard validateName() else { return }
         
-        let cleanedPrice = price.replacingOccurrences(of: ".", with: "")
-                              .replacingOccurrences(of: ",", with: ".")
+        guard let harga = Int(priceInput) else { return }
         
-        guard let harga = Double(cleanedPrice) else { return }
-        
-        let newProduct = Product(name: name, price: harga)
+        let newProduct = Product(name: name, price: Double(harga))
         context.insert(newProduct)
         try? context.save()
         dismiss()

@@ -95,7 +95,7 @@ struct TambahPenjualanView: View {
                 selectedItems: selectedItems,
                 onSave: {
                     selectedItems = [:] // 🧼 reset after save
-//                    dismiss()
+                    dismiss()
                 }
             )
         }
