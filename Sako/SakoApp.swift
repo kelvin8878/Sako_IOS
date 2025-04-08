@@ -22,17 +22,13 @@ struct SakoApp: App {
     var body: some Scene {
         WindowGroup {
             BerandaView()
-               
-                //untuk munculin tips
-                .task {
-                    try? Tips.resetDatastore()
-                    try? Tips.configure([
-                      //display untuk seberapa sering tips muncul
-                       // .displayFrequency(.immediate)
-                        .datastoreLocation(.applicationDefault)
-                    ])
-                }
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    init() {
+        try? Tips.configure([
+            .datastoreLocation(.applicationDefault)
+        ])
     }
 }
