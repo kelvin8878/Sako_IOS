@@ -136,7 +136,7 @@ struct ProductCardView: View {
                                 .foregroundColor(.blue)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
-                                .background(Color(.systemGray6))
+                                .background(Color(.white))
                                 .cornerRadius(12)
                         }
 
