@@ -115,7 +115,7 @@ struct BerandaView: View {
                 }
             )
         }
-        .navigationTitle("Rekap Data")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
     }
 

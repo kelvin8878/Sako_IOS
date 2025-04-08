@@ -26,6 +26,7 @@ struct KonfirmasiPenjualanView: View {
                     .padding(.horizontal)
                 
                 // 🧾 List Produk yang Dipilih
+
                 List {
                     ForEach(Array(selectedItems.keys), id: \.id) { product in
                         let quantity = selectedItems[product] ?? 0
@@ -44,7 +45,7 @@ struct KonfirmasiPenjualanView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                .padding(.horizontal, 10)
+                .padding(.horizontal,0.3)
                 .cornerRadius(16)
             
 

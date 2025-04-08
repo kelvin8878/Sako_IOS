@@ -111,7 +111,7 @@ struct TambahProdukView: View {
                                 .foregroundColor(.red)
                                 .padding(.horizontal, 5)
                         }
-                        Text("Input angka (akan diformat otomatis)")
+                        Text("Hanya angka")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .padding(.horizontal, 5)
