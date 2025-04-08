@@ -9,7 +9,7 @@ import Foundation
 import TipKit
 import SwiftUI
 
-struct dataProdukTip: Tip {
+struct DataProdukTip: Tip {
     var title: Text {
         Text("Data Produk")
     }
@@ -21,8 +21,4 @@ struct dataProdukTip: Tip {
     var image: Image? {
         Image(systemName: "shippingbox.fill")
     }
-    
-    var id: String {
-            "DataProdukTip"  // Unique ID for the tip
-        }
 }
