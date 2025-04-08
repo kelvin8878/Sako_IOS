@@ -15,7 +15,7 @@ struct DataPenjualanTip: Tip {
     }
     
     var message: Text? {
-        Text("Data penjualan yang tersedia di aplikasi ini adalah produk yang telah dibuat oleh pemilik aplikasi.")
+        Text("Segera catat penjualan Anda! Lihat data penjualan yang sudah tercatat, dan tambahkan transaksi baru.")
     }
     
 }

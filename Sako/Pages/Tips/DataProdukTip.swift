@@ -15,6 +15,6 @@ struct DataProdukTip: Tip {
     }
     
     var message: Text? {
-        Text("Data produk yang tersedia di aplikasi ini adalah produk yang telah dibuat oleh pemilik aplikasi.")
+        Text("Tambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
     }
 }
