@@ -22,7 +22,7 @@ struct KonfirmasiPenjualanView: View {
                 .padding(.top)
 
                 Text("Konfirmasi Penjualan")
-                    .font(.system(size: 34, weight: .bold))
+                    .font(.system(size: 28, weight: .bold))
                     .padding(.horizontal)
                 
                 // 🧾 List Produk yang Dipilih
@@ -71,7 +71,7 @@ struct KonfirmasiPenjualanView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         } else {
-                            Text("Simpan")
+                            Text("Selesai")
                                 .font(.title2)
                                 .bold()
                         }
