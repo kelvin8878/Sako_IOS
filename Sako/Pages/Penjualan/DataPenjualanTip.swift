@@ -21,4 +21,5 @@ struct DataPenjualanTip: Tip {
     var image: Image? {
         Image(systemName: "dollarsign.circle.fill")
     }
+    
 }
