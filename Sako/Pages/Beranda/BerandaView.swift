@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import TipKit
 
 struct ChartSegment {
     var name: String
@@ -20,6 +21,9 @@ struct BerandaView: View {
     @State private var showFloatingPreview = false
     @State private var previewPosition: CGPoint = .zero
     
+    let dataProdukTip = DataProdukTip()
+    let dataPenjualanTip = DataPenjualanTip()
+
     let colors: [Color] = [.red, .blue, .orange, .green, .purple, .yellow, .pink, .indigo, .teal, .mint]
     
     // MARK: - Computed Properties
@@ -91,6 +95,116 @@ struct BerandaView: View {
                     headerSection
                     shortcutButtons
                     datePickerSection
+                    Text("Rekap Data Penjualan")
+                        .font(.title2).bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color(UIColor.systemGray6))
+
+                    // Shortcut Buttons
+                    HStack(spacing: 16) {
+                        NavigationLink(destination: DataPenjualanView()) {
+                            shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
+                        }
+                        //Tip data penjualan
+                        .popoverTip(dataPenjualanTip)
+                        
+                        
+                        
+                        NavigationLink(destination: DataProdukView()) {
+                            shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
+                        }
+                        //Tip data produk
+                        .popoverTip(dataProdukTip)
+                    }
+                    .padding(.horizontal)
+
+                    // Date Picker
+                    HStack {
+                        Text(dateFormatter.string(from: selectedDate))
+                            .foregroundColor(.black)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    .onTapGesture {
+                        showDatePicker.toggle()
+                    }
+
+                    // Donut Chart
+                    ZStack {
+                        ZStack {
+                            ForEach(productAngles, id: \.name) { segment in
+                                Circle()
+                                    .trim(from: 0.0, to: CGFloat((segment.end - segment.start) / 360.0))
+                                    .stroke(segment.color, lineWidth: 20)
+                                    .frame(width: 180, height: 180)
+                                    .rotationEffect(.degrees(segment.start))
+                                    .onTapGesture { location in
+                                        if let matching = rankedProductsByRevenue.first(where: { $0.name == segment.name }) {
+                                            selectedProduct = (segment.name, matching.total, segment.color)
+                                            previewPosition = location
+                                            showFloatingPreview = true
+                                        }
+                                    }
+                            }
+
+                            VStack(spacing: 6) {
+                                Text("Total Harga")
+                                    .font(.headline)
+                                Text(showTotal ? "Rp\(totalRevenue.formatted())" : "*****")
+                                    .font(.title2).bold()
+                                Button(action: { showTotal.toggle() }) {
+                                    Image(systemName: showTotal ? "eye.slash.fill" : "eye.fill")
+                                        .padding(8)
+                                        .background(Color(UIColor.systemGray6))
+                                        .clipShape(Circle())
+                                }
+                            }
+                            .frame(width: 140)
+                        }
+                        .padding(.vertical)
+
+                        if showFloatingPreview, let selected = selectedProduct {
+                            FloatingPreviewView(
+                                product: selected,
+                                percentage: totalRevenue > 0 ? Double(selected.value) / Double(totalRevenue) * 100 : 0,
+                                position: previewPosition
+                            ) {
+                                showFloatingPreview = false
+                            }
+                        }
+                    }
+                    .frame(height: 250)
+
+                    // Ranking List
+                    VStack(alignment: .leading) {
+                        Text("Produk (Tertinggi ke Terendah)")
+                            .font(.headline)
+                            .padding(.leading)
+
+                        LazyVStack(spacing: 8) {
+                            ForEach(Array(rankedProductsByRevenue.enumerated()), id: \.1.name) { index, product in
+                                HStack {
+                                    Circle()
+                                        .fill(colors[index % colors.count])
+                                        .frame(width: 12, height: 12)
+                                    Text(product.name)
+                                    Spacer()
+                                    Text("Rp\(product.total.formatted())")
+                                        .bold()
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(8)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.bottom)
                     
                     
                     DonutChartView(
@@ -211,4 +325,20 @@ struct BerandaView: View {
         .background(Color.white)
         .cornerRadius(12)
     }
+}
+
+
+//buat view canvas
+#Preview {
+    BerandaView()
+       
+        //untuk munculin tips
+        .task {
+            try? Tips.resetDatastore()
+            try? Tips.configure([
+              //display untuk seberapa sering tips muncul
+               // .displayFrequency(.immediate)
+                .datastoreLocation(.applicationDefault)
+            ])
+        }
 }
