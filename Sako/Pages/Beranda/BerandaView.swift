@@ -137,14 +137,14 @@ struct BerandaView: View {
                     // Donut Chart
                     ZStack {
                         ZStack {
-                            ForEach(productAngles, id: \.name) { segment in
+                            ForEach(chartSegments, id: \.name) { segment in
                                 Circle()
                                     .trim(from: 0.0, to: CGFloat((segment.end - segment.start) / 360.0))
                                     .stroke(segment.color, lineWidth: 20)
                                     .frame(width: 180, height: 180)
                                     .rotationEffect(.degrees(segment.start))
                                     .onTapGesture { location in
-                                        if let matching = rankedProductsByRevenue.first(where: { $0.name == segment.name }) {
+                                        if let matching = rankedProducts.first(where: { $0.name == segment.name }) {
                                             selectedProduct = (segment.name, matching.total, segment.color)
                                             previewPosition = location
                                             showFloatingPreview = true
@@ -187,7 +187,7 @@ struct BerandaView: View {
                             .padding(.leading)
 
                         LazyVStack(spacing: 8) {
-                            ForEach(Array(rankedProductsByRevenue.enumerated()), id: \.1.name) { index, product in
+                            ForEach(Array(rankedProducts.enumerated()), id: \.1.name) { index, product in
                                 HStack {
                                     Circle()
                                         .fill(colors[index % colors.count])
