@@ -25,6 +25,7 @@ struct SakoApp: App {
                
                 //untuk munculin tips
                 .task {
+                    try? Tips.resetDatastore()
                     try? Tips.configure([
                       //display untuk seberapa sering tips muncul
                        // .displayFrequency(.immediate)

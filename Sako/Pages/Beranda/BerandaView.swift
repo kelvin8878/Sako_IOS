@@ -21,6 +21,7 @@ struct BerandaView: View {
     @State private var previewPosition: CGPoint = .zero
     
     let dataProdukTip = DataProdukTip()
+    let dataPenjualanTip = DataPenjualanTip()
 
     let colors: [Color] = [.red, .blue, .orange, .green, .purple, .yellow, .pink, .indigo, .teal, .mint]
 
@@ -89,13 +90,14 @@ struct BerandaView: View {
                         NavigationLink(destination: DataPenjualanView()) {
                             shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
                         }
+                        //Tip data penjualan
+                        .popoverTip(dataPenjualanTip)
                         
                         
                         
                         NavigationLink(destination: DataProdukView()) {
                             shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
                         }
-                        
                         //Tip data produk
                         .popoverTip(dataProdukTip)
                     }
@@ -221,6 +223,7 @@ struct BerandaView: View {
        
         //untuk munculin tips
         .task {
+            try? Tips.resetDatastore()
             try? Tips.configure([
               //display untuk seberapa sering tips muncul
                // .displayFrequency(.immediate)
