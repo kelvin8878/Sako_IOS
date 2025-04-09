@@ -138,7 +138,6 @@ struct DataPenjualanView: View {
                             .listRowBackground(Color.clear)
                     }
                 }
-                .padding(.horizontal, 0)
                 .foregroundColor(Color(.systemGray6))
                 .listStyle(.plain)
             }
