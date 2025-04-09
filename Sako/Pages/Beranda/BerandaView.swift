@@ -121,7 +121,7 @@ struct BerandaView: View {
 
     // MARK: - Components
     private var headerSection: some View {
-        Text("Rekap Data Penjualan")
+        Text("Rekap Penjualan")
             .font(.system(size: 28, weight: .bold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
