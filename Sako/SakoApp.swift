@@ -1,18 +1,14 @@
-//
-//  SakoApp.swift
-//  Sako
-//
-//  Created by Ammar Sufyan on 26/03/25.
-//
-
 import SwiftUI
 import SwiftData
+import TipKit
 
 @main
 struct SakoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Product.self,
+            ProductOnSale.self,
+            Sale.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,8 +21,14 @@ struct SakoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
+            BerandaView()
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    init() {
+        try? Tips.configure([
+            .datastoreLocation(.applicationDefault)
+        ])
     }
 }
