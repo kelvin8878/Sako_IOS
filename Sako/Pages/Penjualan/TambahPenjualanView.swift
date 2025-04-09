@@ -53,19 +53,37 @@ struct TambahPenjualanView: View {
             .padding(.horizontal)
 
             // 📋 Product List
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(filteredProducts) { product in
-                        ProductRowCardView(product: product, quantity: selectedItems[product] ?? 0) { newQty in
-                            if newQty == 0 {
-                                selectedItems.removeValue(forKey: product)
-                            } else {
-                                selectedItems[product] = newQty
+            if filteredProducts.isEmpty {
+                // Empty State View
+                VStack(spacing: 12) {
+                    Image(systemName: "shippingbox.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.gray)
+                    
+                    Text("Belum ada produk")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemGray6))
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(filteredProducts) { product in
+                            ProductRowCardView(product: product, quantity: selectedItems[product] ?? 0) { newQty in
+                                if newQty == 0 {
+                                    selectedItems.removeValue(forKey: product)
+                                } else {
+                                    selectedItems[product] = newQty
+                                }
                             }
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
 
             // ✅ Confirm Bar
