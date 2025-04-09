@@ -5,6 +5,7 @@ struct KonfirmasiPenjualanView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    let selectedDate: Date 
     let selectedItems: [Product: Int]
     let onSave: () -> Void
 
@@ -104,7 +105,7 @@ struct KonfirmasiPenjualanView: View {
         guard !isSaving else { return }
         isSaving = true
 
-        let sale = Sale(date: .now)
+        let sale = Sale(date: selectedDate)
 
         for (product, quantity) in selectedItems where quantity > 0 {
             let item = ProductOnSale(product: product, quantity: quantity, priceAtSale: product.price)

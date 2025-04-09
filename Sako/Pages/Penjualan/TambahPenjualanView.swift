@@ -9,6 +9,8 @@ struct TambahPenjualanView: View {
     @State private var selectedItems: [Product: Int] = [:]
     @State private var searchText = ""
     @State private var showConfirmationSheet = false
+    
+    let selectedDate: Date
 
     var filteredProducts: [Product] {
         if searchText.isEmpty {
@@ -110,6 +112,7 @@ struct TambahPenjualanView: View {
         .background(Color(.systemGray6))
         .sheet(isPresented: $showConfirmationSheet) {
             KonfirmasiPenjualanView(
+                selectedDate: selectedDate,
                 selectedItems: selectedItems,
                 onSave: {
                     selectedItems = [:] // 🧼 reset after save
