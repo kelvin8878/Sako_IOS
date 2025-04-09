@@ -151,9 +151,15 @@ struct TambahProdukView: View {
     @discardableResult
     private func validateName() -> Bool {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isDuplicate = products.contains { $0.name.lowercased() == name.lowercased() }
         
         if trimmed.isEmpty {
             nameError = "Nama tidak boleh kosong"
+            return false
+        }
+        
+        if isDuplicate {
+            nameError = "Nama produk sudah ada"
             return false
         }
 

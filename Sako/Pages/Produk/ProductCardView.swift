@@ -3,19 +3,16 @@ import SwiftData
 
 struct ProductCardView: View {
     @Bindable var product: Product
+    @Query private var products: [Product]
     @Environment(\.modelContext) private var context
 
     @State private var isExpanded = false
     @State private var editedName: String = ""
-    
-    // State untuk harga tanpa format dan display formatted
     @State private var priceInput: String = ""
     @State private var formattedPrice: String = ""
-    
     @State private var nameError: String? = nil
     @State private var priceError: String? = nil
 
-    // Number formatter untuk harga dengan pemisah ribuan (misalnya "15.000")
     private let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -27,7 +24,6 @@ struct ProductCardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Kartu utama
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(product.name)
@@ -45,10 +41,8 @@ struct ProductCardView: View {
                     withAnimation {
                         isExpanded.toggle()
                         editedName = product.name
-                        // Set nilai awal priceInput dan formattedPrice
                         priceInput = String(format: "%.0f", product.price)
-                        formattedPrice = numberFormatter.string(
-                            from: NSNumber(value: product.price)) ?? priceInput
+                        formattedPrice = numberFormatter.string(from: NSNumber(value: product.price)) ?? priceInput
                         nameError = nil
                         priceError = nil
                     }
@@ -63,8 +57,6 @@ struct ProductCardView: View {
 
             if isExpanded {
                 VStack(alignment: .leading, spacing: 16) {
-
-                    // Input Nama Produk
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Nama Produk")
                             .font(.caption)
@@ -88,7 +80,6 @@ struct ProductCardView: View {
                             .foregroundColor(.gray)
                     }
 
-                    // Input Harga Produk
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Harga Produk")
                             .font(.caption)
@@ -100,17 +91,14 @@ struct ProductCardView: View {
                             .textFieldStyle(.roundedBorder)
                             .onChange(of: formattedPrice) { oldValue, newValue in
                                 let filtered = newValue.filter { $0.isNumber }
-                                // Simpan nilai asli tanpa format
                                 priceInput = filtered
-                                
-                                // Format ulang untuk display jika ada angka
+
                                 if let number = Int(filtered), !filtered.isEmpty {
-                                    formattedPrice = numberFormatter.string(
-                                        from: NSNumber(value: number)) ?? filtered
+                                    formattedPrice = numberFormatter.string(from: NSNumber(value: number)) ?? filtered
                                 } else {
                                     formattedPrice = filtered
                                 }
-                                
+
                                 _ = validatePrice()
                             }
 
@@ -136,13 +124,11 @@ struct ProductCardView: View {
                                 .foregroundColor(.blue)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
-                                .background(Color(.white))
+                                .background(Color.white)
                                 .cornerRadius(12)
                         }
 
                         Button {
-                            // Saat menyimpan, validasi mengizinkan field kosong.
-                            // Jika validasi lulus, maka simpan perubahannya.
                             if validateName() && validatePrice() {
                                 saveChanges()
                             }
@@ -152,11 +138,10 @@ struct ProductCardView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
-                                .background(Color.blue)
+                                .background(hasChanges && canSave ? Color.blue : Color.gray.opacity(0.4))
                                 .cornerRadius(12)
                         }
-                        // Jika Anda ingin tombol save tetap aktif walaupun kosong, sesuaikan logikanya.
-                        // Contoh: .disabled(false)
+                        .disabled(!hasChanges || !canSave)
                     }
                 }
                 .padding(16)
@@ -164,6 +149,7 @@ struct ProductCardView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: isExpanded)
         .background(Color.white)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
@@ -171,17 +157,31 @@ struct ProductCardView: View {
         .padding(.vertical, 3)
     }
 
-    // Jika ingin tombol save aktif meskipun field kosong, hapus pengecekan !editedName.isEmpty dan !priceInput.isEmpty
     private var canSave: Bool {
         nameError == nil && priceError == nil
+    }
+
+    private var hasChanges: Bool {
+        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let originalName = product.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let originalPrice = String(format: "%.0f", product.price)
+        return trimmedName != originalName || priceInput != originalPrice
     }
 
     @discardableResult
     private func validateName() -> Bool {
         let trimmed = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isDuplicate = products.contains {
+            $0.name.lowercased() == trimmed.lowercased() && $0.id != product.id
+        }
 
         if trimmed.isEmpty {
             nameError = "Nama tidak boleh kosong"
+            return false
+        }
+
+        if isDuplicate {
+            nameError = "Nama produk sudah ada"
             return false
         }
 
@@ -204,7 +204,6 @@ struct ProductCardView: View {
         return true
     }
 
-
     @discardableResult
     private func validatePrice() -> Bool {
         if priceInput.isEmpty {
@@ -226,14 +225,12 @@ struct ProductCardView: View {
             priceError = "Harga harus lebih dari 0"
             return false
         }
-        
+
         priceError = nil
         return true
     }
 
     private func saveChanges() {
-        // Mengijinkan penyimpanan walaupun name atau harga kosong.
-        // Jika harga tidak terkonversi, gunakan nilai default (misalnya 0).
         let newPrice = Double(priceInput) ?? 0
         product.name = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
         product.price = newPrice
