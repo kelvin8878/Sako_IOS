@@ -161,7 +161,7 @@ struct ProductCardView: View {
                 }
                 .padding(16)
                 .background(Color(.systemGray6))
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .background(Color.white)
@@ -178,34 +178,38 @@ struct ProductCardView: View {
 
     @discardableResult
     private func validateName() -> Bool {
-        // Jika nama kosong, dianggap valid (tidak ada error)
         let trimmed = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+
         if trimmed.isEmpty {
-            nameError = nil
-            return true
+            nameError = "Nama tidak boleh kosong"
+            return false
         }
-        
+
         if editedName.first?.isWhitespace == true {
             nameError = "Nama tidak boleh diawali spasi"
             return false
-        } else if trimmed.count > 25 {
+        }
+
+        if trimmed.count > 25 {
             nameError = "Nama melebihi 25 karakter"
             return false
-        } else if trimmed.rangeOfCharacter(from: .letters) == nil {
+        }
+
+        if trimmed.rangeOfCharacter(from: .letters) == nil {
             nameError = "Nama tidak valid"
             return false
-        } else {
-            nameError = nil
-            return true
         }
+
+        nameError = nil
+        return true
     }
+
 
     @discardableResult
     private func validatePrice() -> Bool {
-        // Jika harga kosong, dianggap valid (tidak ada error)
         if priceInput.isEmpty {
-            priceError = nil
-            return true
+            priceError = "Harga tidak boleh kosong"
+            return false
         }
 
         if priceInput.hasPrefix("0") && priceInput.count > 1 {
@@ -248,126 +252,3 @@ struct ProductCardView: View {
         return formatter.string(from: NSNumber(value: price)) ?? "Rp \(Int(price))"
     }
 }
-
-
-
-
-// design yang tidak di approve !!
-
-//struct ProductCardView: View {
-//    @Bindable var product: Product
-//    @Environment(\.modelContext) private var context
-//    @State private var isEditing = false
-//    @State private var editedName: String = ""
-//    @State private var editedPrice: String = ""
-//
-//    var body: some View {
-//        VStack(spacing: 0) {
-//            if isEditing {
-//                // Edit Mode
-//                VStack(spacing: 16) {
-//                    VStack(alignment: .leading, spacing: 8) {
-//                        Text("Nama Produk")
-//                            .font(.caption)
-//                            .foregroundColor(.gray)
-//                        
-//                        TextField("Masukkan nama produk", text: $editedName)
-//                            .textFieldStyle(.roundedBorder)
-//                            .autocorrectionDisabled()
-//                    }
-//                    
-//                    VStack(alignment: .leading, spacing: 8) {
-//                        Text("Harga Produk")
-//                            .font(.caption)
-//                            .foregroundColor(.gray)
-//                        
-//                        TextField("Masukkan harga", text: $editedPrice)
-//                            .textFieldStyle(.roundedBorder)
-//                            .keyboardType(.numberPad)
-//                    }
-//                    
-//                    HStack {
-//                        Button {
-//                            isEditing = false
-//                        } label: {
-//                            Text("Batal")
-//                                .font(.headline)
-//                                .foregroundColor(.blue)
-//                                .padding(.vertical, 10)
-//                                .frame(maxWidth: .infinity)
-//                        }
-//                        
-//                        Button {
-//                            saveChanges()
-//                        } label: {
-//                            Text("Simpan")
-//                                .font(.headline)
-//                                .foregroundColor(.white)
-//                                .padding(.vertical, 10)
-//                                .frame(maxWidth: .infinity)
-//                                .background(Color.blue)
-//                                .cornerRadius(8)
-//                        }
-//                    }
-//                }
-//                .padding(16)
-//                .background(Color.white)
-//                .transition(.opacity)
-//            } else {
-//                // Display Mode
-//                HStack {
-//                    VStack(alignment: .leading, spacing: 6) {
-//                        Text(product.name)
-//                            .font(.headline)
-//                            .foregroundColor(.black)
-//                        
-//                        Text(formatPrice(product.price))
-//                            .font(.subheadline)
-//                            .foregroundColor(.gray)
-//                    }
-//                    
-//                    Spacer()
-//                    
-//                    Button {
-//                        editedName = product.name
-//                        editedPrice = String(format: "%.0f", product.price)
-//                        withAnimation {
-//                            isEditing = true
-//                        }
-//                    } label: {
-//                        Text("Ubah")
-//                            .font(.system(size: 16))
-//                            .foregroundColor(.blue)
-//                    }
-//                }
-//                .padding(16)
-//                .background(Color.white)
-//                .transition(.opacity)
-//            }
-//        }
-//        .background(Color.white)
-//        .cornerRadius(16)
-//        .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
-//        .padding(.horizontal, 4)
-//        .padding(.vertical, 3)
-//    }
-//    
-//    private func saveChanges() {
-//        guard let newPrice = Double(editedPrice), newPrice >= 0 else { return }
-//        product.name = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
-//        product.price = newPrice
-//        try? context.save()
-//        withAnimation {
-//            isEditing = false
-//        }
-//    }
-//    
-//    private func formatPrice(_ price: Double) -> String {
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .currency
-//        formatter.currencySymbol = "Rp"
-//        formatter.maximumFractionDigits = 0
-//        formatter.locale = Locale(identifier: "id_ID")
-//        return formatter.string(from: NSNumber(value: price)) ?? "Rp \(Int(price))"
-//    }
-//}
