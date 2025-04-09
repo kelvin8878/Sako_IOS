@@ -5,7 +5,7 @@ struct DataProdukTip: Tip {
         Text("Kelola Produk")
     }
     
-    var message: Text {
-        Text("Tambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
+    var message: Text? {
+        Text(verbatim: "\nTambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
     }
 }

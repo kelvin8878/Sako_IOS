@@ -5,8 +5,7 @@ struct DataPenjualanTip: Tip {
         Text("Kelola Penjualan")
     }
     
-    var message: Text {
-        Text("Segera catat penjualan Anda! Lihat data penjualan yang sudah tercatat, dan tambahkan transaksi baru.")
+    var message: Text? {
+        Text(verbatim: "\nSegera catat penjualan Anda! Lihat data penjualan yang sudah tercatat, dan tambahkan transaksi baru.")
     }
-    
 }

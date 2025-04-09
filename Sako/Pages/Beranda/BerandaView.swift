@@ -11,9 +11,7 @@ struct BerandaView: View {
     @State private var selectedProduct: (name: String, revenue: Int, quantity: Int, color: Color)? = nil
     @State private var showFloatingPreview = false
     @State private var previewPosition: CGPoint = .zero
-    
-    let dataProdukTip = DataProdukTip()
-    let dataPenjualanTip = DataPenjualanTip()
+
     let colors: [Color] = [.red, .blue, .orange, .green, .purple, .yellow, .pink, .indigo, .teal, .mint]
 
     var filteredSales: [Sale] {
@@ -78,15 +76,19 @@ struct BerandaView: View {
                         .padding(.horizontal)
                     
                     HStack(spacing: 16) {
-                        NavigationLink(destination: DataPenjualanView()) {
-                            shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
+                        ZStack {
+                            NavigationLink(destination: DataPenjualanView()) {
+                                shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
+                            }
                         }
-                        .popoverTip(dataPenjualanTip)
-
-                        NavigationLink(destination: DataProdukView()) {
-                            shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
+                        .popoverTip(DataPenjualanTip())
+                        
+                        ZStack {
+                            NavigationLink(destination: DataProdukView()) {
+                                shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
+                            }
                         }
-                        .popoverTip(dataProdukTip)
+                        .popoverTip(DataProdukTip())
                     }
                     .padding(.horizontal)
                     
@@ -165,7 +167,6 @@ struct BerandaView: View {
             )
         }
         .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func shortcutCard(icon: String, title: String) -> some View {
@@ -186,4 +187,8 @@ struct BerandaView: View {
 // MARK: - Preview
 #Preview {
     BerandaView()
+        .task {
+            try? Tips.resetDatastore()
+            try? Tips.configure()
+        }
 }

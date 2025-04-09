@@ -27,6 +27,28 @@ struct ProductValidator {
 
         return nil
     }
+    
+    static func validateEditedName(_ name: String, existingProducts: [Product]) -> String? {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmed.isEmpty {
+            return "Nama tidak boleh kosong"
+        }
+
+        if name.first?.isWhitespace == true {
+            return "Nama tidak boleh diawali spasi"
+        }
+
+        if trimmed.count > 25 {
+            return "Nama melebihi 25 karakter"
+        }
+
+        if trimmed.rangeOfCharacter(from: .letters) == nil {
+            return "Nama tidak valid"
+        }
+
+        return nil
+    }
 
     static func validatePrice(_ priceInput: String) -> String? {
         if priceInput.isEmpty {

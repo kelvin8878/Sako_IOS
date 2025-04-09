@@ -162,7 +162,7 @@ struct ProductCardView: View {
 
     @discardableResult
     private func validateName() -> Bool {
-        nameError = ProductValidator.validateName(editedName, existingProducts: products)
+        nameError = ProductValidator.validateEditedName(editedName, existingProducts: products)
         return nameError == nil
     }
 
