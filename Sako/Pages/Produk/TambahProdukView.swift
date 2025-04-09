@@ -111,7 +111,7 @@ struct TambahProdukView: View {
                                 .foregroundColor(.red)
                                 .padding(.horizontal, 5)
                         }
-                        Text("Input angka (akan diformat otomatis)")
+                        Text("Hanya angka")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .padding(.horizontal, 5)
@@ -150,56 +150,62 @@ struct TambahProdukView: View {
     
     @discardableResult
     private func validateName() -> Bool {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isDuplicate = products.contains { $0.name.lowercased() == name.lowercased() }
         
-//        // Trim whitespace dari input
-//        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if name.isEmpty  {
-            nameError = nil
+        if trimmed.isEmpty {
+            nameError = "Nama tidak boleh kosong"
             return false
         }
         
-        let isDuplicate = products.contains { $0.name.lowercased() == name.lowercased() }
-        
+        if isDuplicate {
+            nameError = "Nama produk sudah ada"
+            return false
+        }
+
         if name.first?.isWhitespace == true {
             nameError = "Nama tidak boleh diawali spasi"
             return false
-        } else if isDuplicate {
-            nameError = "Nama produk sudah ada"
-            return false
-        } else if name.count > 25 {
+        }
+
+        if trimmed.count > 25 {
             nameError = "Nama melebihi 25 karakter"
             return false
-        } else if name.rangeOfCharacter(from: .whitespacesAndNewlines.inverted) == nil {
-            nameError = "Nama produk tidak valid"
-            return false
-        } else {
-            nameError = nil
-            return true
         }
+
+        if trimmed.rangeOfCharacter(from: .letters) == nil {
+            nameError = "Nama tidak valid"
+            return false
+        }
+
+        nameError = nil
+        return true
     }
         
-    private func validatePrice() {
+    @discardableResult
+    private func validatePrice() -> Bool {
         if priceInput.isEmpty {
-            priceError = nil
-            return
+            priceError = "Harga tidak boleh kosong"
+            return false
         }
-        
+
         if priceInput.hasPrefix("0") && priceInput.count > 1 {
             priceError = "Harga tidak boleh dimulai dengan 0"
-            return
+            return false
         }
-        
-        guard let priceValue = Int(priceInput) else {
+
+        guard let value = Int(priceInput) else {
             priceError = "Format harga tidak valid"
-            return
+            return false
+        }
+
+        if value <= 0 {
+            priceError = "Harga harus lebih dari 0"
+            return false
         }
         
-        if priceValue <= 0 {
-            priceError = "Harga harus lebih dari 0"
-        } else {
-            priceError = nil
-        }
+        priceError = nil
+        return true
     }
     
     private func simpanProduk() {

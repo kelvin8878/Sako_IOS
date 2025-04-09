@@ -45,8 +45,8 @@ struct FloatingPreviewView: View {
                 opacity = 1
             }
             
-            // Auto-dismiss after 5 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            // Auto-dismiss after 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation {
                     dismissAction()
                 }

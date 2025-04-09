@@ -11,14 +11,10 @@ import SwiftUI
 
 struct DataProdukTip: Tip {
     var title: Text {
-        Text("Data Produk")
+        Text("Kelola Produk")
     }
     
     var message: Text? {
-        Text("Data produk yang tersedia di aplikasi ini adalah produk yang telah dibuat oleh pemilik aplikasi.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "shippingbox.fill")
+        Text("Tambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
     }
 }

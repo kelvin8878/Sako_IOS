@@ -138,7 +138,6 @@ struct DataPenjualanView: View {
                             .listRowBackground(Color.clear)
                     }
                 }
-                .padding(.horizontal, 0)
                 .foregroundColor(Color(.systemGray6))
                 .listStyle(.plain)
             }
@@ -147,7 +146,7 @@ struct DataPenjualanView: View {
         }
         .background(Color(.systemGray6))
         .sheet(isPresented: $showTambahPenjualan) {
-            TambahPenjualanView()
+            TambahPenjualanView(selectedDate: selectedDate)
                 .presentationDetents([.large])
         }
         .navigationBarBackButtonHidden(true)

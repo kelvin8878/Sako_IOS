@@ -115,17 +115,16 @@ struct BerandaView: View {
                 }
             )
         }
-        .navigationTitle("Rekap Data")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - Components
     private var headerSection: some View {
-        Text("Rekap Data Penjualan")
+        Text("Rekap Penjualan")
             .font(.system(size: 28, weight: .bold))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color(UIColor.systemGray6))
+            .padding(.horizontal)
     }
 
     private var shortcutButtons: some View {

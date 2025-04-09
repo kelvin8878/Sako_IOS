@@ -5,6 +5,7 @@ struct KonfirmasiPenjualanView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    let selectedDate: Date 
     let selectedItems: [Product: Int]
     let onSave: () -> Void
 
@@ -26,6 +27,7 @@ struct KonfirmasiPenjualanView: View {
                     .padding(.horizontal)
                 
                 // 🧾 List Produk yang Dipilih
+
                 List {
                     ForEach(Array(selectedItems.keys), id: \.id) { product in
                         let quantity = selectedItems[product] ?? 0
@@ -44,7 +46,7 @@ struct KonfirmasiPenjualanView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                .padding(.horizontal, 10)
+                .padding(.horizontal,0.3)
                 .cornerRadius(16)
             
 
@@ -103,7 +105,7 @@ struct KonfirmasiPenjualanView: View {
         guard !isSaving else { return }
         isSaving = true
 
-        let sale = Sale(date: .now)
+        let sale = Sale(date: selectedDate)
 
         for (product, quantity) in selectedItems where quantity > 0 {
             let item = ProductOnSale(product: product, quantity: quantity, priceAtSale: product.price)

@@ -53,9 +53,9 @@ struct PenjualanCardView: View {
                 }
             }
         }
-//        .frame(maxWidth: .infinity)
         .padding()
         .background(Color(.white))
         .cornerRadius(12)
+        .padding(.horizontal, 0)
     }
 }
