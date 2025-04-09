@@ -85,8 +85,6 @@ struct DataProdukView: View {
                     LazyVStack(spacing: 12) {
                         ForEach(filteredProducts) { product in
                             ProductCardView(product: product)
-                                .background(Color.white)
-                                .cornerRadius(8)
                         }
                     }
                     .padding()

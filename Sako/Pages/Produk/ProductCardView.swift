@@ -38,7 +38,7 @@ struct ProductCardView: View {
                 Spacer()
 
                 Button {
-                    withAnimation {
+                    withAnimation(.easeInOut(duration: 0.4)) {
                         isExpanded.toggle()
                         editedName = product.name
                         priceInput = String(format: "%.0f", product.price)
@@ -115,7 +115,7 @@ struct ProductCardView: View {
 
                     HStack(spacing: 12) {
                         Button {
-                            withAnimation {
+                            withAnimation(.easeInOut(duration: 0.4)) {
                                 isExpanded = false
                             }
                         } label: {
@@ -146,13 +146,12 @@ struct ProductCardView: View {
                 }
                 .padding(16)
                 .background(Color(.systemGray6))
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: isExpanded)
-        .background(Color.white)
+        .animation(.easeInOut(duration: 0.4), value: isExpanded)
         .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         .padding(.horizontal, 4)
         .padding(.vertical, 3)
     }
