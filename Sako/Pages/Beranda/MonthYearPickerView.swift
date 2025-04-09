@@ -86,7 +86,7 @@ struct MonthYearPicker: UIViewRepresentable {
         }
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            pickerView.reloadAllComponents() // Refresh warna teks
+            pickerView.reloadAllComponents()
             
             let selectedMonth = pickerView.selectedRow(inComponent: 0) + 1
             let selectedYear = Int(years[pickerView.selectedRow(inComponent: 1)]) ?? startYear

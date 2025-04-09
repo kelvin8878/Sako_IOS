@@ -2,28 +2,23 @@ import SwiftUI
 import SwiftData
 
 struct TambahProdukView: View {
+    @Query private var products: [Product]
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
-    @Query private var products: [Product]
     
     @State private var name: String = ""
-    @State private var priceInput: String = "" // Untuk input user
-    @State private var formattedPrice: String = "" // Untuk display dengan separator
+    @State private var priceInput: String = ""
+    @State private var formattedPrice: String = ""
     @State private var priceError: String? = nil
     @State private var nameError: String? = nil
     
-    private let numberFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = "."
-        formatter.decimalSeparator = ""
-        formatter.maximumFractionDigits = 0
-        return formatter
-    }()
+    private var canSave: Bool {
+        !name.isEmpty && !priceInput.isEmpty && nameError == nil && priceError == nil
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // 🔼 Header: Kembali
             HStack {
                 Button {
                     dismiss()
@@ -40,15 +35,12 @@ struct TambahProdukView: View {
             .padding(.horizontal)
             .padding(.top, 16)
 
-            // 🏷️ Judul
             Text("Tambah Produk")
                 .font(.system(size: 28, weight: .bold))
                 .padding(.horizontal)
             
-            // 📄 Input Field
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    // Nama Produk
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Nama Produk")
                             .font(.headline)
@@ -76,7 +68,6 @@ struct TambahProdukView: View {
                             .padding(.horizontal, 5)
                     }
                     
-                    // Harga Produk
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Harga")
                             .font(.headline)
@@ -92,12 +83,10 @@ struct TambahProdukView: View {
                             .onChange(of: formattedPrice) { oldValue, newValue in
                                 let filtered = newValue.filter { $0.isNumber }
                                 
-                                // Simpan nilai asli tanpa format
                                 priceInput = filtered
                                 
-                                // Format ulang untuk display
                                 if let number = Int(filtered) {
-                                    formattedPrice = numberFormatter.string(from: NSNumber(value: number)) ?? filtered
+                                    formattedPrice = number.formattedWithSeparator()
                                 } else {
                                     formattedPrice = filtered
                                 }
@@ -122,7 +111,6 @@ struct TambahProdukView: View {
 
             Spacer()
 
-            // ✅ Tombol Simpan
             Button {
                 if validateName() {
                     simpanProduk()
@@ -144,68 +132,16 @@ struct TambahProdukView: View {
         .navigationBarBackButtonHidden(true)
     }
     
-    private var canSave: Bool {
-        !name.isEmpty && !priceInput.isEmpty && nameError == nil && priceError == nil
-    }
-    
     @discardableResult
     private func validateName() -> Bool {
-        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let isDuplicate = products.contains { $0.name.lowercased() == name.lowercased() }
-        
-        if trimmed.isEmpty {
-            nameError = "Nama tidak boleh kosong"
-            return false
-        }
-        
-        if isDuplicate {
-            nameError = "Nama produk sudah ada"
-            return false
-        }
-
-        if name.first?.isWhitespace == true {
-            nameError = "Nama tidak boleh diawali spasi"
-            return false
-        }
-
-        if trimmed.count > 25 {
-            nameError = "Nama melebihi 25 karakter"
-            return false
-        }
-
-        if trimmed.rangeOfCharacter(from: .letters) == nil {
-            nameError = "Nama tidak valid"
-            return false
-        }
-
-        nameError = nil
-        return true
+        nameError = ProductValidator.validateName(name, existingProducts: products)
+        return nameError == nil
     }
-        
+
     @discardableResult
     private func validatePrice() -> Bool {
-        if priceInput.isEmpty {
-            priceError = "Harga tidak boleh kosong"
-            return false
-        }
-
-        if priceInput.hasPrefix("0") && priceInput.count > 1 {
-            priceError = "Harga tidak boleh dimulai dengan 0"
-            return false
-        }
-
-        guard let value = Int(priceInput) else {
-            priceError = "Format harga tidak valid"
-            return false
-        }
-
-        if value <= 0 {
-            priceError = "Harga harus lebih dari 0"
-            return false
-        }
-        
-        priceError = nil
-        return true
+        priceError = ProductValidator.validatePrice(priceInput)
+        return priceError == nil
     }
     
     private func simpanProduk() {
@@ -213,7 +149,7 @@ struct TambahProdukView: View {
         
         guard let harga = Int(priceInput) else { return }
         
-        let newProduct = Product(name: name, price: Double(harga))
+        let newProduct = Product(name: name, price: harga)
         context.insert(newProduct)
         try? context.save()
         dismiss()

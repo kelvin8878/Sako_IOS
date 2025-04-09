@@ -2,9 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct TambahPenjualanView: View {
+    @Query private var allProducts: [Product]
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
-    @Query private var allProducts: [Product]
     
     @State private var selectedItems: [Product: Int] = [:]
     @State private var searchText = ""
@@ -23,13 +24,12 @@ struct TambahPenjualanView: View {
         selectedItems.values.reduce(0, +)
     }
 
-    var totalPrice: Double {
-        selectedItems.reduce(0) { $0 + (Double($1.value) * $1.key.price) }
+    var totalPrice: Int {
+        selectedItems.reduce(0) { $0 + $1.value * $1.key.price }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // 🔙 Header
             HStack {
                 Button("Batal") { dismiss() }
                     .foregroundColor(.blue)
@@ -42,7 +42,6 @@ struct TambahPenjualanView: View {
                 .font(.system(size: 28, weight: .bold))
                 .padding(.horizontal)
 
-            // 🔍 Search Field
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
@@ -54,9 +53,7 @@ struct TambahPenjualanView: View {
             .cornerRadius(12)
             .padding(.horizontal)
 
-            // 📋 Product List
             if filteredProducts.isEmpty {
-                // Empty State View
                 VStack(spacing: 12) {
                     Image(systemName: "shippingbox.fill")
                         .resizable()
@@ -88,7 +85,6 @@ struct TambahPenjualanView: View {
                 }
             }
 
-            // ✅ Confirm Bar
             if totalItems > 0 {
                 Button {
                     showConfirmationSheet = true
@@ -115,7 +111,7 @@ struct TambahPenjualanView: View {
                 selectedDate: selectedDate,
                 selectedItems: selectedItems,
                 onSave: {
-                    selectedItems = [:] // 🧼 reset after save
+                    selectedItems = [:]
                     dismiss()
                 }
             )

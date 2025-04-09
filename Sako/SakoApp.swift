@@ -22,13 +22,12 @@ struct SakoApp: App {
     var body: some Scene {
         WindowGroup {
             BerandaView()
+                .task {
+                    try? Tips.configure([
+                        .datastoreLocation(.applicationDefault)
+                    ])
+                }
         }
         .modelContainer(sharedModelContainer)
-    }
-    
-    init() {
-        try? Tips.configure([
-            .datastoreLocation(.applicationDefault)
-        ])
     }
 }
