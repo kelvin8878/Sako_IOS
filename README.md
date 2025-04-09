@@ -1,12 +1,35 @@
-# Sako (Sistem Kantin Offline)
-Aplikasi iOS untuk mencatat dan merekap transaksi penjualan di kantin. Aplikasi ini dirancang untuk bekerja secara offline dan menyediakan laporan harian serta bulanan.
+# 🧾 Sako – Sistem Kantin Offline
 
-## Fitur Utama
+**Sako** adalah aplikasi iOS yang membantu pencatatan dan rekap transaksi penjualan kantin secara **offline**. Dirancang khusus untuk kemudahan dan efisiensi tanpa bergantung pada koneksi internet.
 
-    📊 Pencatatan transaksi penjualan harian
+<img src="https://github.com/user-attachments/assets/9e2d4e3c-6bba-4d01-9ef6-0bf78df49665" width="250px" alt="Speech Translate Logo">
 
-    📅 Rekapitulasi penjualan per bulan
+## ✨ Fitur Unggulan
 
-    💾 Penyimpanan data lokal (offline)
+- 📊 **Pencatatan Penjualan Harian**  
+  Tambah transaksi dengan cepat dan akurat, lengkap dengan detail produk & jumlah penjualan.
 
-    🔍 Pencarian dan filter transaksi
+- 📅 **Rekap Bulanan Otomatis**  
+  Pantau performa penjualan tiap bulan dalam tampilan yang ringkas dan informatif.
+
+- 💾 **Data Lokal (100% Offline)**  
+  Semua data disimpan langsung di perangkat. Tidak butuh koneksi internet.
+
+- 🔍 **Pencarian & Filter Cerdas**  
+  Temukan transaksi atau produk dengan cepat menggunakan fitur pencarian dan filter berdasarkan tanggal.
+
+## 📸 Tampilan Aplikasi
+
+<img src="https://github.com/user-attachments/assets/fa6cdf79-481d-475f-acf0-234790ffb496" alt="Sako App Screenshot" />
+
+## 🚀 Teknologi
+
+- Swift
+- SwiftUI
+- SwiftData
+
+## 📌 Catatan
+
+Sako masih dalam tahap pengembangan aktif. Feedback dan kontribusi sangat diapresiasi!  
+
+Dibuat dengan ❤️ oleh Team 5 – Morning Shift

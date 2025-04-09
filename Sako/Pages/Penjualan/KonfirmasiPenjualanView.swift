@@ -5,15 +5,22 @@ struct KonfirmasiPenjualanView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    let selectedDate: Date 
+    @State private var isSaving = false
+    
+    let selectedDate: Date
     let selectedItems: [Product: Int]
     let onSave: () -> Void
-
-    @State private var isSaving = false
+    
+    
+    private var totalHarga: Int {
+        selectedItems.reduce(0) { result, entry in
+            let (product, quantity) = entry
+            return result + (product.price * quantity)
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-                // 🔙 Header
                 HStack {
                     Button("Batal") { dismiss() }
                         .foregroundColor(.blue)
@@ -26,8 +33,6 @@ struct KonfirmasiPenjualanView: View {
                     .font(.system(size: 28, weight: .bold))
                     .padding(.horizontal)
                 
-                // 🧾 List Produk yang Dipilih
-
                 List {
                     ForEach(Array(selectedItems.keys), id: \.id) { product in
                         let quantity = selectedItems[product] ?? 0
@@ -40,7 +45,7 @@ struct KonfirmasiPenjualanView: View {
                                     .foregroundColor(.gray)
                             }
                             Spacer()
-                            Text("Rp\(Int(product.price * Double(quantity)).formattedWithSeparator())")
+                            Text("Rp\(Int(product.price * quantity).formattedWithSeparator())")
                                 .bold()
                         }
                         .padding(.vertical, 8)
@@ -49,8 +54,6 @@ struct KonfirmasiPenjualanView: View {
                 .padding(.horizontal,0.3)
                 .cornerRadius(16)
             
-
-                // 💰 Total
                 HStack {
                     Text("Total")
                         .font(.title3)
@@ -63,7 +66,6 @@ struct KonfirmasiPenjualanView: View {
                 }
                 .padding(.horizontal)
 
-                // ✅ Tombol Simpan
                 Button {
                     saveTransaction()
                 } label: {
@@ -92,15 +94,6 @@ struct KonfirmasiPenjualanView: View {
         .background(Color(.systemGray6))
         }
 
-    // MARK: - Total Harga
-    private var totalHarga: Double {
-        selectedItems.reduce(0) { result, entry in
-            let (product, quantity) = entry
-            return result + (product.price * Double(quantity))
-        }
-    }
-
-    // MARK: - Simpan Transaksi
     private func saveTransaction() {
         guard !isSaving else { return }
         isSaving = true
@@ -120,7 +113,7 @@ struct KonfirmasiPenjualanView: View {
             onSave()
             dismiss()
         } catch {
-            print("❌ Gagal menyimpan transaksi:", error.localizedDescription)
+            print("Gagal menyimpan transaksi:", error.localizedDescription)
             isSaving = false
         }
     }

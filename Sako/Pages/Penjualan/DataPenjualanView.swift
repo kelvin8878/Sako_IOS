@@ -2,27 +2,25 @@ import SwiftUI
 import SwiftData
 
 struct DataPenjualanView: View {
-    @Environment(\.dismiss) var dismiss
     @Query var sales: [Sale]
+    
+    @Environment(\.dismiss) var dismiss
+    
     @State private var selectedDate: Date = Date()
     @State private var showTambahPenjualan = false
     @State private var searchText: String = ""
 
-
-    
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         return formatter
     }
 
-    private var totalPenjualan: Double {
+    private var totalPenjualan: Int {
         filteredSales.reduce(0) { $0 + $1.totalPrice }
         
     }
     
-    
-    // Filtered berdasarkan tanggal & search
     private var filteredSales: [Sale] {
         sales.filter { sale in
             let isSameDate = Calendar.current.isDate(sale.date, inSameDayAs: selectedDate)
@@ -33,8 +31,6 @@ struct DataPenjualanView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-
-            // 🔼 Header: Kembali + Tambah
             HStack {
                 Button {
                     dismiss()
@@ -60,12 +56,10 @@ struct DataPenjualanView: View {
             }
             .padding(.horizontal)
 
-            // 🏷️ Judul manual
             Text("Kelola Penjualan")
                 .font(.system(size: 28, weight: .bold))
                 .padding(.horizontal)
 
-            // 📅 Compact DatePicker + 🔍 Search Bar
             HStack(spacing: 12) {
                 DatePicker(
                     "",
@@ -91,8 +85,6 @@ struct DataPenjualanView: View {
             }
             .padding(.horizontal)
 
-
-            // 💰 Total Penjualan
             HStack(alignment: .center, spacing: 12) {
                 Image(systemName: "dollarsign.circle.fill")
                     .foregroundColor(.white)
@@ -116,7 +108,6 @@ struct DataPenjualanView: View {
             .cornerRadius(12)
             .padding(.horizontal)
 
-            // 📋 List atau Empty State
             if filteredSales.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "cart.badge.questionmark")
@@ -153,6 +144,7 @@ struct DataPenjualanView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     DataPenjualanView()
 }

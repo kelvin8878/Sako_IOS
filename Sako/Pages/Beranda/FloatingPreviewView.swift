@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct FloatingPreviewView: View {
+    @State private var opacity: Double = 0
+
     let product: (name: String, revenue: Int, quantity: Int, color: Color)
     let percentage: Double
     let position: CGPoint
     let dismissAction: () -> Void
     
-    @State private var opacity: Double = 0
-
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
