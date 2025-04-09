@@ -124,8 +124,7 @@ struct BerandaView: View {
         Text("Rekap Data Penjualan")
             .font(.system(size: 28, weight: .bold))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color(UIColor.systemGray6))
+            .padding(.horizontal)
     }
 
     private var shortcutButtons: some View {
