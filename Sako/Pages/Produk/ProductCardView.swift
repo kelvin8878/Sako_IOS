@@ -73,8 +73,8 @@ struct ProductCardView: View {
                         TextField("Masukkan nama produk", text: $editedName)
                             .autocorrectionDisabled()
                             .textFieldStyle(.roundedBorder)
-                            .onChange(of: editedName) { _ in
-                                _ = validateName()
+                            .onChange(of: editedName) {
+                                validateName()
                             }
 
                         if let error = nameError {
