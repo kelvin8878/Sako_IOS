@@ -2,8 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct DataProdukView: View {
-    @Environment(\.dismiss) var dismiss
     @Query var products: [Product]
+    
+    @Environment(\.dismiss) var dismiss
+
     @State private var showTambahProduk = false
     @State private var searchText = ""
 
@@ -15,7 +17,6 @@ struct DataProdukView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // 🔼 Header: Kembali + Tambah
             HStack {
                 Button {
                     dismiss()
@@ -42,14 +43,11 @@ struct DataProdukView: View {
             .padding(.horizontal)
             .padding(.top, 8)
 
-            // �️ White background for title and search
             VStack(alignment: .leading, spacing: 12) {
-                // 🏷️ Judul
                 Text("Kelola Produk")
                     .font(.system(size: 28, weight: .bold))
                     .padding(.horizontal)
                 
-                // 🔍 Search Bar
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
@@ -63,9 +61,7 @@ struct DataProdukView: View {
             }
             .background(Color(.systemGray6))
             
-            // 📦 List Produk with gray background
             if filteredProducts.isEmpty {
-                // Empty State View
                 VStack(spacing: 12) {
                     Image(systemName: "shippingbox.fill")
                         .resizable()
@@ -101,6 +97,7 @@ struct DataProdukView: View {
     }
 }
 
+// MARK: - Preview
 #Preview {
     DataProdukView()
 }

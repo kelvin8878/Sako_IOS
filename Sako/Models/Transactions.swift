@@ -6,12 +6,12 @@ import SwiftData
 final class Product {
     @Attribute(.unique) var id: UUID = UUID()
     var name: String
-    var price: Double
+    var price: Int
     var items: [ProductOnSale]?  // Relasi ke ProductOnSale
     
-    init(name: String, price: Double) {
+    init(name: String, price: Int) {
         self.name = name
-        self.price = max(0, price)  // Pastikan harga tidak negatif
+        self.price = max(0, price)
     }
 }
 
@@ -19,15 +19,15 @@ final class Product {
 @Model
 final class ProductOnSale {
     @Attribute(.unique) var id: UUID = UUID()
-    var product: Product
+    var product: Product // Relasi ke Product
     var quantity: Int
-    var priceAtSale: Double  // Harga saat transaksi
-    var sale: Sale?  // Relasi balik ke Sale
+    var priceAtSale: Int
+    var sale: Sale? // Relasi ke Sale
     
-    init(product: Product, quantity: Int, priceAtSale: Double? = nil) {
+    init(product: Product, quantity: Int, priceAtSale: Int? = nil) {
         self.product = product
-        self.quantity = max(1, quantity)  // Quantity minimal 1
-        self.priceAtSale = priceAtSale ?? product.price  // Simpan harga saat ini jika tidak ada
+        self.quantity = max(1, quantity)
+        self.priceAtSale = priceAtSale ?? product.price
     }
 }
 
@@ -39,8 +39,8 @@ final class Sale {
     var items: [ProductOnSale] = []
     
     // Computed property: Total harga transaksi
-    var totalPrice: Double {
-        items.reduce(0) { $0 + ($1.priceAtSale * Double($1.quantity)) }
+    var totalPrice: Int {
+        items.reduce(0) { $0 + ($1.priceAtSale * $1.quantity) }
     }
     
     // Computed property: Daftar nama produk + quantity
@@ -50,11 +50,5 @@ final class Sale {
     
     init(date: Date) {
         self.date = date
-    }
-    
-    // Method untuk menambahkan produk ke sale
-    func addProduct(product: Product, quantity: Int) {
-        let item = ProductOnSale(product: product, quantity: quantity)
-        items.append(item)
     }
 }
