@@ -6,6 +6,6 @@ struct DataProdukTip: Tip {
     }
     
     var message: Text? {
-        Text(verbatim: "\nTambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
+        Text("Tambahkan produk Anda dulu untuk memulai serta akses informasi produk dan ubah detail produk yang sudah ditambah.")
     }
 }
