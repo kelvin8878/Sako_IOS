@@ -73,8 +73,8 @@ struct DataPenjualanView: View {
 
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(.blue)
-                    TextField("Cari Pesanan", text: $searchText)
+                        .foregroundColor(.gray)
+                    TextField("Cari pesanan...", text: $searchText)
                         .autocorrectionDisabled()
                         .font(.callout)
                 }
