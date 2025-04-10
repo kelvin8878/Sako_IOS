@@ -22,7 +22,7 @@ struct ProductCardView: View {
     private var hasChanges: Bool {
         let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
         let originalName = product.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let originalPrice = String(format: "%.0f", product.price)
+        let originalPrice = String(product.price)
         return trimmedName != originalName || priceInput != originalPrice
     }
 
