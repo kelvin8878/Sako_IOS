@@ -45,7 +45,7 @@ struct ProductCardView: View {
                     withAnimation(.easeInOut(duration: 0.4)) {
                         isExpanded.toggle()
                         editedName = product.name
-                        priceInput = String(format: "%.0f", product.price)
+                        priceInput = String(product.price)
                         formattedPrice = product.price.formattedWithSeparator()
                         nameError = nil
                         priceError = nil
