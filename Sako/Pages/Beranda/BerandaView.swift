@@ -4,12 +4,11 @@ import TipKit
 
 struct BerandaView: View {
     @Query private var allSales: [Sale]
-    
+    @Environment(\.modelContext) private var context
     @State private var selectedDate = Date()
     @State private var isPresented = false
-    
-    // MARK: - Data Filter & Agregasi
 
+    // MARK: - Data Filter & Agregasi
     var filteredSales: [Sale] {
         let calendar = Calendar.current
         return allSales.filter {
@@ -27,19 +26,19 @@ struct BerandaView: View {
                 productStats[item.product.name]?.quantity += item.quantity
             }
         }
-        
+
         let products: [(name: String, revenue: Int, quantity: Int)] = productStats.map {
-            ($0.key, $0.value.revenue, $0.value.quantity)
+            (key, value) in (key, value.revenue, value.quantity)
         }
 
-        return products.sorted { $0.revenue > $1.revenue }
-
-        .prefix(10)
-        .map { $0 }
+        return products
+            .sorted(by: { (a, b) in a.revenue > b.revenue })
+            .prefix(10)
+            .map { $0 }
     }
 
     var totalRevenue: Int {
-        rankedProducts.reduce(0) { $0 + $1.revenue }
+        filteredSales.reduce(0) { $0 + $1.totalPrice }
     }
 
     var previousMonthRevenue: Int {
@@ -65,12 +64,10 @@ struct BerandaView: View {
     }
 
     // MARK: - View
-
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    
                     // Header
                     Text("Rekap Penjualan")
                         .font(.system(size: 26, weight: .bold))
@@ -82,7 +79,6 @@ struct BerandaView: View {
                     
                     // Card Box
                     VStack(spacing: 20) {
-                        
                         // Total Pendapatan
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
@@ -105,7 +101,7 @@ struct BerandaView: View {
                         
                         // Chart Placeholder
                         VStack {
-                            Text("Chart Mingguan") // placeholder
+                            Text("Chart Mingguan") // Placeholder grafik
                                 .foregroundColor(.white)
                         }
                         .frame(width: 305, height: 230)
@@ -118,25 +114,37 @@ struct BerandaView: View {
                                 .font(.system(size: 22, weight: .semibold))
                                 .padding(.horizontal, 10)
                             
-                            ForEach(Array(rankedProducts.prefix(3).enumerated()), id: \.offset) { index, product in
-                                HStack {
-                                    Text("\(index + 1). \(product.name)")
-                                        .font(.system(size: 16))
-                                        .lineLimit(1)
-                                    
-                                    Spacer()
-                                    
-                                    VStack(alignment: .trailing) {
-                                        Text("Rp \(product.revenue.formattedWithSeparator())")
+                            if rankedProducts.isEmpty {
+                                Text("Belum ada data penjualan bulan ini.")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 10)
+                            } else {
+                                ForEach(Array(rankedProducts.prefix(3).enumerated()), id: \.offset) { index, product in
+                                    HStack {
+                                        Text("\(index + 1). \(product.name)")
                                             .font(.system(size: 16))
-                                        Text("\(product.quantity) Terjual")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
+                                            .lineLimit(1)
+
+                                        Spacer()
+
+                                        VStack(alignment: .trailing) {
+                                            Text("Rp \(product.revenue.formattedWithSeparator())")
+                                                .font(.system(size: 16))
+                                            Text("\(product.quantity) Terjual")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                        }
                                     }
+                                    .padding(.horizontal, 10)
+                                    
+                                    if index < rankedProducts.prefix(3).count - 1 {
+                                                Divider()
+                                                    .background(Color.gray)
+                                            }
                                 }
-                                .padding(.horizontal, 10)
                             }
-                            
+
                             HStack {
                                 Spacer()
                                 Text("Lihat lebih banyak")
@@ -157,50 +165,28 @@ struct BerandaView: View {
             }
             .background(Color(UIColor.systemGray6))
         }
-    }
-}
-
-// MARK: - Date Picker Button (Popover)
-private func DatePickerButton(selectedDate: Binding<Date>, isPresented: Binding<Bool>) -> some View {
-    Button(action: {
-        withAnimation {
-            isPresented.wrappedValue.toggle()
-        }
-    }) {
-        HStack(spacing: 8) {
-            Image(systemName: "calendar")
-                .font(.system(size: 17))
-                .foregroundColor(.primary)
-            Text(selectedDate.wrappedValue.toMonthYearString())
-                .font(.system(size: 17))
-                .foregroundColor(.primary)
-            Spacer()
-            Image(systemName: "chevron.down")
-                .font(.system(size: 17))
-                .foregroundColor(.primary)
-                .rotationEffect(.degrees(isPresented.wrappedValue ? 180 : 0))
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(Color.white)
-        .cornerRadius(12)
-        .frame(width: 205, height: 36)
-    }
-    .popover(isPresented: isPresented, arrowEdge: .top) {
-        VStack {
-            MonthYearPicker(selectedDate: selectedDate)
-                .frame(width: 300, height: 200)
-                .presentationCompactAdaptation(.popover)
-        }
-        .padding()
-    }
-}
-
-// MARK: - Preview
-#Preview {
-    BerandaView()
         .task {
-            try? Tips.resetDatastore()
-            try? Tips.configure()
+            Seeder.seedInitialData(context: context)
         }
+    }
+}
+
+#Preview {
+    do {
+        let container = try ModelContainer(for: Product.self, ProductOnSale.self, Sale.self)
+        let context = container.mainContext
+
+        // RESET DATA SEBELUM SEEDING
+        try? context.delete(model: Sale.self)
+        try? context.delete(model: ProductOnSale.self)
+        try? context.delete(model: Product.self)
+
+        // Jalankan ulang Seeder
+        Seeder.seedInitialData(context: context)
+
+        return BerandaView()
+            .modelContainer(container)
+    } catch {
+        return Text("Failed to load preview: \(error.localizedDescription)")
+    }
 }
