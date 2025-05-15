@@ -5,125 +5,106 @@ struct MonthYearPickerView: View {
     @Binding var isPresented: Bool
     
     var body: some View {
-        VStack {
+        VStack(alignment:.leading){
             MonthYearPicker(selectedDate: $selectedDate)
         }
-        .presentationDetents([.height(200)])
+        .presentationDetents([.height(100)])
     }
 }
 
 struct MonthYearPicker: UIViewRepresentable {
     @Binding var selectedDate: Date
-    
+
     func makeUIView(context: Context) -> UIPickerView {
         let picker = UIPickerView()
         picker.delegate = context.coordinator
         picker.dataSource = context.coordinator
-
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: selectedDate)
-        
-        if let month = components.month, let year = components.year {
-            let yearIndex = year - context.coordinator.startYear
-            picker.selectRow(month - 1, inComponent: 0, animated: false)
-            picker.selectRow(yearIndex, inComponent: 1, animated: false)
-        }
-        
+        context.coordinator.setInitialSelection(picker, for: selectedDate)
         return picker
     }
-    
+
     func updateUIView(_ uiView: UIPickerView, context: Context) {}
-    
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
+
     class Coordinator: NSObject, UIPickerViewDelegate, UIPickerViewDataSource {
-        var parent: MonthYearPicker
-        
-        let months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                      "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-        
+        let parent: MonthYearPicker
+        let months = Calendar.current.monthSymbols
         let startYear = 2020
-        let endYear = Calendar.current.component(.year, from: Date()) + 100
-        lazy var years = Array(startYear...endYear).map { String($0) }
-        
+        let currentYear = Calendar.current.component(.year, from: Date())
+        lazy var years = (startYear...(currentYear + 100)).map(String.init)
+
         init(_ parent: MonthYearPicker) {
             self.parent = parent
         }
-        
-        func numberOfComponents(in pickerView: UIPickerView) -> Int {
-            return 2
-        }
-        
+
+        func numberOfComponents(in pickerView: UIPickerView) -> Int { 2 }
+
         func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            return component == 0 ? months.count : years.count
+            component == 0 ? months.count : years.count
+        }
+
+        func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+            component == 0 ? 100 : 100
         }
         
-        func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-            let calendar = Calendar.current
-            let now = Date()
-            let currentComponents = calendar.dateComponents([.year, .month], from: now)
-            let currentYear = currentComponents.year ?? startYear
-            let currentMonth = currentComponents.month ?? 1
-            
-            let selectedYearRow = pickerView.selectedRow(inComponent: 1)
-            let selectedYear = Int(years[selectedYearRow]) ?? currentYear
-            
-            let isFuture: Bool
-            if component == 0 {
-                let thisMonth = row + 1
-                isFuture = selectedYear > currentYear || (selectedYear == currentYear && thisMonth > currentMonth)
-            } else {
-                let thisYear = Int(years[row]) ?? currentYear
-                let selectedMonthRow = pickerView.selectedRow(inComponent: 0) + 1
-                isFuture = thisYear > currentYear || (thisYear == currentYear && selectedMonthRow > currentMonth)
-            }
-            
+        func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+            28
+        }
+
+        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+            let label = UILabel()
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 20)
+
             let title = component == 0 ? months[row] : years[row]
-            let color: UIColor = isFuture ? .lightGray : .label
-            return NSAttributedString(string: title, attributes: [.foregroundColor: color])
+            label.text = title
+            label.textColor = isFuture(row: row, component: component, pickerView: pickerView) ? .lightGray : .label
+            return label
         }
-        
+
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             pickerView.reloadAllComponents()
-            
-            let selectedMonth = pickerView.selectedRow(inComponent: 0) + 1
-            let selectedYear = Int(years[pickerView.selectedRow(inComponent: 1)]) ?? startYear
 
-            let calendar = Calendar.current
+            let month = pickerView.selectedRow(inComponent: 0) + 1
+            let year = Int(years[pickerView.selectedRow(inComponent: 1)]) ?? currentYear
+
             let now = Date()
-            let currentComponents = calendar.dateComponents([.year, .month], from: now)
-            let currentYear = currentComponents.year ?? startYear
-            let currentMonth = currentComponents.month ?? 1
-            
-            // Prevent future date
-            if selectedYear > currentYear || (selectedYear == currentYear && selectedMonth > currentMonth) {
-                pickerView.selectRow(currentMonth - 1, inComponent: 0, animated: true)
-                pickerView.selectRow(currentYear - startYear, inComponent: 1, animated: true)
-                pickerView.reloadAllComponents()
-                
-                var components = DateComponents()
-                components.year = currentYear
-                components.month = currentMonth
-                components.day = 1
-                if let safeDate = calendar.date(from: components) {
-                    parent.selectedDate = safeDate
-                }
+            let nowComponents = Calendar.current.dateComponents([.year, .month], from: now)
+
+            if year > (nowComponents.year ?? currentYear) || (year == nowComponents.year && month > (nowComponents.month ?? 12)) {
+                setInitialSelection(pickerView, for: now)
+                parent.selectedDate = now
                 return
             }
-            
-            var components = DateComponents()
-            components.year = selectedYear
-            components.month = selectedMonth
-            components.day = 1
-            if let date = calendar.date(from: components) {
+
+            if let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: 1)) {
                 parent.selectedDate = date
             }
         }
-        
-        func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-            return component == 0 ? 150 : 80
+
+        func isFuture(row: Int, component: Int, pickerView: UIPickerView) -> Bool {
+            let now = Calendar.current.dateComponents([.year, .month], from: Date())
+            let selectedMonth = pickerView.selectedRow(inComponent: 0) + 1
+            let selectedYear = Int(years[pickerView.selectedRow(inComponent: 1)]) ?? currentYear
+
+            if component == 0 {
+                let testMonth = row + 1
+                return selectedYear > now.year! || (selectedYear == now.year! && testMonth > now.month!)
+            } else {
+                let testYear = Int(years[row]) ?? currentYear
+                return testYear > now.year! || (testYear == now.year! && selectedMonth > now.month!)
+            }
+        }
+
+        func setInitialSelection(_ picker: UIPickerView, for date: Date) {
+            let components = Calendar.current.dateComponents([.month, .year], from: date)
+            if let month = components.month, let year = components.year {
+                picker.selectRow(month - 1, inComponent: 0, animated: false)
+                picker.selectRow(year - startYear, inComponent: 1, animated: false)
+            }
         }
     }
 }

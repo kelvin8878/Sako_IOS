@@ -4,15 +4,14 @@ import TipKit
 
 struct BerandaView: View {
     @Query private var allSales: [Sale]
-    
+
+
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
     @State private var showTotal = true
     @State private var selectedProduct: (name: String, revenue: Int, quantity: Int, color: Color)? = nil
     @State private var showFloatingPreview = false
     @State private var previewPosition: CGPoint = .zero
-
-    let colors: [Color] = [.red, .blue, .orange, .green, .purple, .yellow, .pink, .indigo, .teal, .mint]
 
     var filteredSales: [Sale] {
         let calendar = Calendar.current
@@ -43,130 +42,128 @@ struct BerandaView: View {
         rankedProducts.reduce(0) { $0 + $1.revenue }
     }
     
-    var chartSegments: [ChartSegment] {
-        let total = Double(totalRevenue)
-        var segments: [ChartSegment] = []
-        var currentAngle = -90.0
-        
-        for (index, product) in rankedProducts.enumerated() {
-            let percent = Double(product.revenue) / total
-            let end = currentAngle + (percent * 360)
-            segments.append(
-                ChartSegment(
-                    name: product.name,
-                    revenue: product.revenue,
-                    quantity: product.quantity,
-                    color: colors[index % colors.count],
-                    start: currentAngle,
-                    end: end
-                )
-            )
-            currentAngle = end
-        }
-        return segments
-    }
-    
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack() {
                     Text("Rekap Penjualan")
-                        .font(.system(size: 28, weight: .bold))
+                        .font(.system(size: 26, weight: .bold))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     
-                    HStack(spacing: 16) {
-                        ZStack {
-                            NavigationLink(destination: DataPenjualanView()) {
-                                shortcutCard(icon: "dollarsign.circle.fill", title: "Kelola\nPenjualan")
-                            }
+                    HStack {
+                        HStack {
+                            Text(selectedDate.toMonthYearString())
+                                .font(.system(size: 16))
+                                .foregroundColor(.black)
+
+                            Spacer(minLength: 8)
+
+                            Image(systemName: "calendar")
+                                .font(.system(size: 25))
+                                .foregroundColor(.black)
                         }
-                        .popoverTip(DataPenjualanTip())
+                        .padding(.leading)
+                        .padding(.vertical, 7)
+                        .padding(.horizontal, 12)
+                        .background(Color.white)
+                        .cornerRadius(12)
                         
-                        ZStack {
-                            NavigationLink(destination: DataProdukView()) {
-                                shortcutCard(icon: "shippingbox.fill", title: "Kelola\nProduk")
-                            }
+                        .frame(width: 190, alignment: .leading) //  Tentukan ukuran frame
+                        .onTapGesture {
+                            showDatePicker.toggle()
                         }
-                        .popoverTip(DataProdukTip())
+
+                        Spacer() // Dorong box ke kiri
                     }
                     .padding(.horizontal)
-                    
-                    HStack {
-                        Text(selectedDate.toMonthYearString())
-                            .foregroundColor(.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
+
+
+                    ZStack(alignment: .top) {
+                        VStack() {
+                            
+                            // TOTAL PENDAPATAN
+                            HStack() {
+                                VStack(alignment: .leading) {
+                                    Text("Total Pendapatan")
+                                        .font(.system(size:22))
+                                        .background(Color("#212121"))
+                                        .opacity(0.6)
+                                        .bold()
+                                        
+                                    
+                                    Text("Rp 888.888.888")
+                                        .font(.title)
+                                        .bold()
+
+                                    Text("↑ Rp 10.000.000")
+                                        .font(.subheadline)
+                                        .foregroundColor(.green)
+                                        .bold()
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding([.leading, .trailing],10)
+                            .padding(.bottom,20)
+                            
+                            // CHART
+                            VStack(){
+                                
+                            }
+                            .frame(width:305, height:230)
+                            .background(Color.gray)
+                            .padding(.bottom,20)
+                            VStack(alignment: .leading){
+                                HStack{
+                                    Text("Produk Terlaris")
+                                        .font(.system(size:22))
+                                        .fontWeight(.semibold)
+                                    
+                                    Spacer()
+                                }
+                                .padding([.leading, .trailing],10)
+                            }
+                        }
+                        .padding() // untuk margin dari tepi layar
                     }
-                    .padding()
+                    .frame(width:360,height:610,alignment: .top)
                     .background(Color.white)
                     .cornerRadius(12)
-                    .padding(.horizontal)
-                    .onTapGesture {
-                        showDatePicker.toggle()
-                    }
+                    .overlay(
+                        ZStack(alignment: .topLeading) {
+                            if showDatePicker {
+                                // 1. Lapisan transparan untuk menangkap tap di luar picker
+                                Color.black.opacity(0.001)
+                                    .ignoresSafeArea()
+                                    .onTapGesture {
+                                        withAnimation {
+                                            showDatePicker = false
+                                        }
+                                    }
 
-                    DonutChartView(
-                        segments: chartSegments,
-                        totalRevenue: totalRevenue,
-                        showTotal: $showTotal,
-                        selectedProduct: $selectedProduct,
-                        showFloatingPreview: $showFloatingPreview,
-                        previewPosition: $previewPosition
+                                // 2. DatePicker tampil di atas lapisan transparan
+                                VStack(){
+                                    MonthYearPickerView(selectedDate: $selectedDate, isPresented: $showDatePicker)
+                                        .frame(width: 280, height: 180)
+                                        .background(Color.white)
+                                        .cornerRadius(12)
+                                        .shadow(radius: 4)
+                                        .padding(.top, 5) // jarak dari button
+                                }
+                                .padding(.horizontal)
+                            }
+                        }, alignment: .topLeading
                     )
 
-                    VStack(alignment: .leading) {
-                        if(!rankedProducts.isEmpty) {
-                            Text("Penjualan (Tertinggi ke Terendah)")
-                                .font(.headline)
-                                .padding(.leading)
-                        }
-                        
-                        LazyVStack(spacing: 8) {
-                            ForEach(Array(rankedProducts.enumerated()), id: \.1.name) { index, product in
-                                HStack {
-                                    Circle()
-                                        .fill(colors[index % colors.count])
-                                        .frame(width: 12, height: 12)
-                                    Text(product.name)
-                                    Spacer()
-                                    VStack(alignment: .trailing) {
-                                        Text("Rp\(product.revenue.formatted())")
-                                            .bold()
-                                        Text("\(product.quantity) terjual")
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-                                    }
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(8)
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    .padding(.bottom)
+                    
+                    
                 }
             }
             .background(Color(UIColor.systemGray6))
-            .sheet(isPresented: $showDatePicker) {
-                MonthYearPickerView(selectedDate: $selectedDate, isPresented: $showDatePicker)
-            }
-            .overlay(
-                Group {
-                    if showFloatingPreview, let product = selectedProduct {
-                        let percentage = Double(product.revenue) / Double(totalRevenue) * 100
-                        FloatingPreviewView(
-                            product: product,
-                            percentage: percentage,
-                            position: previewPosition,
-                            dismissAction: { showFloatingPreview = false }
-                        )
-                    }
-                }
-            )
+            
+
         }
-        .navigationTitle("")
     }
 
     private func shortcutCard(icon: String, title: String) -> some View {
