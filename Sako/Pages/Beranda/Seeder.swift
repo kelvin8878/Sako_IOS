@@ -13,24 +13,28 @@ struct Seeder {
         let minyak = Product(name: "Minyak Goreng", price: 15000)
         let nasi = Product(name: "Nasi Goreng", price: 15000)
         let kwetiau = Product(name: "Kwetiau Goreng", price: 15000)
+        let Pete = Product(name: "Pete", price: 15000)
 
         let bebekItem = ProductOnSale(product: bebek, quantity: 2)
         let minyakItem = ProductOnSale(product: minyak, quantity: 3)
         let nasiItem = ProductOnSale(product: nasi, quantity: 3)
         let kwetiauItem = ProductOnSale(product: kwetiau, quantity: 10)
+        let PeteItem = ProductOnSale(product: Pete, quantity: 10)
 
-        sale.items.append(contentsOf: [bebekItem, minyakItem, nasiItem, kwetiauItem])
+        sale.items.append(contentsOf: [bebekItem, minyakItem, nasiItem, kwetiauItem,PeteItem])
 
         // Insert
         context.insert(bebek)
         context.insert(minyak)
         context.insert(nasi)
         context.insert(kwetiau)
+        context.insert(Pete)
 
         context.insert(bebekItem)
         context.insert(minyakItem)
         context.insert(nasiItem)
         context.insert(kwetiauItem)
+        context.insert(PeteItem)
 
         context.insert(sale)
 
@@ -41,7 +45,7 @@ struct Seeder {
         let nasis = Product(name: "Nasi Goreng", price: 15000)
         let kwetiaus = Product(name: "Kwetiau Goreng", price: 15000)
 
-        let bebekItems = ProductOnSale(product: bebeks, quantity: 10)
+        let bebekItems = ProductOnSale(product: bebeks, quantity: 100)
         let minyakItems = ProductOnSale(product: minyaks, quantity: 10)
         let nasiItems = ProductOnSale(product: nasis, quantity: 10)
         let kwetiauItems = ProductOnSale(product: kwetiaus, quantity: 10)

@@ -27,7 +27,7 @@ struct DatePickerButton: View {
             .padding(.vertical, 8)
             .background(Color.white)
             .cornerRadius(12)
-            .frame(width: 205, height: 36)
+            .frame(width: 210, height: 36)
         }
         .popover(isPresented: $isPresented, arrowEdge: .top) {
             VStack {
@@ -37,11 +37,5 @@ struct DatePickerButton: View {
             }
             .padding()
         }
-    }
-}
-
-struct DatePickerButton_Previews: PreviewProvider {
-    static var previews: some View {
-        DatePickerButton(selectedDate: .constant(Date()), isPresented: .constant(false))
     }
 }
