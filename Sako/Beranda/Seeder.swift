@@ -7,130 +7,262 @@ struct Seeder {
         let existingSales = try? context.fetch(FetchDescriptor<Sale>())
         guard existingSales?.isEmpty ?? true else { return }
 
-        let sale = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!)
-
-        let bebek = Product(name: "Bebek Goreng", price: 10000)
-        let minyak = Product(name: "Minyak Goreng", price: 15000)
-        let nasi = Product(name: "Nasi Goreng", price: 15000)
-        let kwetiau = Product(name: "Kwetiau Goreng", price: 15000)
-        let Pete = Product(name: "Pete", price: 15000)
-
-        let bebekItem = ProductOnSale(product: bebek, quantity: 2)
-        let minyakItem = ProductOnSale(product: minyak, quantity: 3)
-        let nasiItem = ProductOnSale(product: nasi, quantity: 3)
-        let kwetiauItem = ProductOnSale(product: kwetiau, quantity: 10)
-        let PeteItem = ProductOnSale(product: Pete, quantity: 10)
-
-        sale.items.append(contentsOf: [bebekItem, minyakItem, nasiItem, kwetiauItem,PeteItem])
-
-        // Insert
-        context.insert(bebek)
-        context.insert(minyak)
-        context.insert(nasi)
-        context.insert(kwetiau)
-        context.insert(Pete)
-
-        context.insert(bebekItem)
-        context.insert(minyakItem)
-        context.insert(nasiItem)
-        context.insert(kwetiauItem)
-        context.insert(PeteItem)
-
-        context.insert(sale)
-
-        let sales = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 14))!)
-
-        let bebeks = Product(name: "Bebek Goreng", price: 10000)
-        let minyaks = Product(name: "Minyak Goreng", price: 15000)
-        let nasis = Product(name: "Nasi Goreng", price: 15000)
-        let kwetiaus = Product(name: "Kwetiau Goreng", price: 15000)
-
-        let bebekItems = ProductOnSale(product: bebeks, quantity: 100)
-        let minyakItems = ProductOnSale(product: minyaks, quantity: 10)
-        let nasiItems = ProductOnSale(product: nasis, quantity: 10)
-        let kwetiauItems = ProductOnSale(product: kwetiaus, quantity: 10)
-
-        sales.items.append(contentsOf: [bebekItems, minyakItems, nasiItems,kwetiauItems])
-
-        // Insert
-        context.insert(bebeks)
-        context.insert(minyaks)
-        context.insert(nasis)
-        context.insert(kwetiaus)
-
-        context.insert(bebekItems)
-        context.insert(minyakItems)
-        context.insert(nasiItems)
-        context.insert(kwetiauItems)
-
-        context.insert(sales)
+        // Create products
+        let products = createProducts()
         
-        let saless = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 21))!)
-
-        let bebekss = Product(name: "Bebek Goreng", price: 20000)
-        let minyakss = Product(name: "Minyak Goreng", price: 25000)
-        let nasiss = Product(name: "Nasi Goreng", price: 25000)
-        let kwetiauss = Product(name: "Kwetiau Goreng", price: 25000)
-
-        let bebekItemss = ProductOnSale(product: bebeks, quantity: 100)
-        let minyakItemss = ProductOnSale(product: minyaks, quantity: 10)
-        let nasiItemss = ProductOnSale(product: nasis, quantity: 20)
-        let kwetiauItemss = ProductOnSale(product: kwetiaus, quantity: 10)
-
-        saless.items.append(contentsOf: [bebekItemss, minyakItemss, nasiItemss,kwetiauItemss])
-
-        // Insert
-        context.insert(bebekss)
-        context.insert(minyakss)
-        context.insert(nasiss)
-        context.insert(kwetiauss)
-
-        context.insert(bebekItemss)
-        context.insert(minyakItemss)
-        context.insert(nasiItemss)
-        context.insert(kwetiauItemss)
-
-        context.insert(saless)
+        // Insert products into the context
+        let allProducts = [
+            products.bebek, products.minyak, products.nasi, products.kwetiau, products.pete,
+            products.kangkung, products.ikan, products.sate, products.kerupuk, products.risol
+        ]
         
-//        // MARK: Contoh 1
-//        let Bebek = Product(name: "Bebek Goreng", price: 10000)
-//        let BebekItem = ProductOnSale(product: Bebek, quantity: 2)
-//        let BebekSale = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!)
-//        BebekSale.items.append(BebekItem)
-//
-//        // MARK: Contoh 2
-//        let minyak = Product(name: "Minyak Goreng", price: 15000)
-//        let minyakItem = ProductOnSale(product: minyak, quantity: 3)
-//        let minyakSale = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!)
-//        minyakSale.items.append(minyakItem)
-//        
-//        let Nasi = Product(name: "Nasi Goreng", price: 15000)
-//        let NasiItem = ProductOnSale(product: Nasi, quantity: 3)
-//        let NasiSale = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!)
-//        NasiSale.items.append(NasiItem)
-//        
-//        let Kwetiau = Product(name: "Kwetiau Goreng", price: 15000)
-//        let KwetiauItem = ProductOnSale(product: Kwetiau, quantity: 10)
-//        let KwetiauSale = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!)
-//        KwetiauSale.items.append(KwetiauItem)
-//
-//        // Tambahkan ke context
-//        context.insert(Bebek)
-//        context.insert(BebekItem)
-//        context.insert(BebekSale)
-//
-//        context.insert(minyak)
-//        context.insert(minyakItem)
-//        context.insert(minyakSale)
-//        
-//        context.insert(Nasi)
-//        context.insert(NasiItem)
-//        context.insert(NasiSale)
-//        
-//        context.insert(Kwetiau)
-//        context.insert(KwetiauItem)
-//        context.insert(KwetiauSale)
+        for product in allProducts {
+            context.insert(product)
+        }
+        
+        // Create and insert sales for different dates
+        createAndInsertSales(with: products, context: context)
 
         try? context.save()
+    }
+    
+    // Helper function to create and insert sales data
+    private static func createAndInsertSales(with products: ProductCollection, context: ModelContext) {
+        // May 1st sale
+        let may1Date = Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!
+        let may1Items = [
+            (product: products.bebek, quantity: 2),
+            (product: products.minyak, quantity: 3),
+            (product: products.nasi, quantity: 3),
+            (product: products.kwetiau, quantity: 10),
+            (product: products.pete, quantity: 10),
+            (product: products.kangkung, quantity: 20),
+            (product: products.ikan, quantity: 5),
+            (product: products.sate, quantity: 7),
+            (product: products.kerupuk, quantity: 10),
+            (product: products.risol, quantity: 15)
+        ]
+        let may1Sale = createSale(date: may1Date, items: may1Items, context: context)
+        context.insert(may1Sale)
+        
+        // May 14th sale
+        let may14Date = Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 14))!
+        let may14Items = [
+            (product: products.bebek, quantity: 5),
+            (product: products.minyak, quantity: 7),
+            (product: products.nasi, quantity: 10),
+            (product: products.kwetiau, quantity: 7),
+            (product: products.pete, quantity: 8),
+            (product: products.kangkung, quantity: 10),
+            (product: products.ikan, quantity: 20),
+            (product: products.sate, quantity: 10),
+            (product: products.kerupuk, quantity: 3),
+            (product: products.risol, quantity: 5)
+        ]
+        let may14Sale = createSale(date: may14Date, items: may14Items, context: context)
+        context.insert(may14Sale)
+        
+        // May 21st sale
+        let may21Date = Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 21))!
+        let may21Items = [
+            (product: products.bebek, quantity: 8),
+            (product: products.minyak, quantity: 10),
+            (product: products.nasi, quantity: 20),
+            (product: products.kwetiau, quantity: 30),
+            (product: products.pete, quantity: 40),
+            (product: products.kangkung, quantity: 20),
+            (product: products.ikan, quantity: 15),
+            (product: products.sate, quantity: 20),
+            (product: products.kerupuk, quantity: 5),
+            (product: products.risol, quantity: 8)
+        ]
+        let may21Sale = createSale(date: may21Date, items: may21Items, context: context)
+        context.insert(may21Sale)
+        
+        // May 25th sale
+        let may25Date = Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 25))!
+        let may25Items = [
+            (product: products.bebek, quantity: 10),
+            (product: products.minyak, quantity: 10),
+            (product: products.nasi, quantity: 10),
+            (product: products.kwetiau, quantity: 10),
+            (product: products.pete, quantity: 10),
+            (product: products.kangkung, quantity: 10),
+            (product: products.ikan, quantity: 10),
+            (product: products.sate, quantity: 10),
+            (product: products.kerupuk, quantity: 10),
+            (product: products.risol, quantity: 10)
+        ]
+        let may25Sale = createSale(date: may25Date, items: may25Items, context: context)
+        context.insert(may25Sale)
+        
+        // APRIL
+        let april1Date = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 1))!
+        let april1Items = [
+            (product: products.bebek, quantity: 30),
+            (product: products.minyak, quantity: 20),
+            (product: products.nasi, quantity: 7),
+            (product: products.kwetiau, quantity: 25),
+            (product: products.pete, quantity: 30),
+            (product: products.kangkung, quantity: 20),
+            (product: products.ikan, quantity: 10),
+            (product: products.sate, quantity: 10),
+            (product: products.kerupuk, quantity: 30),
+            (product: products.risol, quantity: 10)
+        ]
+        let april1Sale = createSale(date: april1Date, items: april1Items, context: context)
+        context.insert(april1Sale)
+        
+        let april14Date = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 14))!
+        let april14Items = [
+            (product: products.bebek, quantity: 5),
+            (product: products.minyak, quantity: 7),
+            (product: products.nasi, quantity: 10),
+            (product: products.kwetiau, quantity: 50),
+            (product: products.pete, quantity: 23),
+            (product: products.kangkung, quantity: 5),
+            (product: products.ikan, quantity: 5),
+            (product: products.sate, quantity: 5),
+            (product: products.kerupuk, quantity: 5),
+            (product: products.risol, quantity: 15)
+        ]
+        let april14Sale = createSale(date: april14Date, items: april14Items, context: context)
+        context.insert(april14Sale)
+        
+        let april21Date = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 21))!
+        let april21Items = [
+            (product: products.bebek, quantity: 30),
+            (product: products.minyak, quantity: 10),
+            (product: products.nasi, quantity: 30),
+            (product: products.kwetiau, quantity: 20),
+            (product: products.pete, quantity: 50),
+            (product: products.kangkung, quantity: 5),
+            (product: products.ikan, quantity: 1),
+            (product: products.sate, quantity: 3),
+            (product: products.kerupuk, quantity: 5),
+            (product: products.risol, quantity: 1)
+        ]
+        let april21Sale = createSale(date: april21Date, items: april21Items, context: context)
+        context.insert(april21Sale)
+        
+        let april28Date = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 28))!
+        let april28Items = [
+            (product: products.bebek, quantity: 100),
+            (product: products.minyak, quantity: 20),
+            (product: products.nasi, quantity: 30),
+            (product: products.kwetiau, quantity: 20),
+            (product: products.pete, quantity: 50),
+            (product: products.kangkung, quantity: 10),
+            (product: products.ikan, quantity: 10),
+            (product: products.sate, quantity: 7),
+            (product: products.kerupuk, quantity: 10),
+            (product: products.risol, quantity: 10)
+        ]
+        let april28Sale = createSale(date: april28Date, items: april28Items, context: context)
+        context.insert(april28Sale)
+        
+        let maret1Date = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 1))!
+        let maret1Items = [
+            (product: products.bebek, quantity: 5),
+            (product: products.minyak, quantity: 5),
+            (product: products.nasi, quantity: 5),
+            (product: products.kwetiau, quantity: 5),
+            (product: products.pete, quantity: 5),
+            (product: products.kangkung, quantity: 5),
+            (product: products.ikan, quantity: 5),
+            (product: products.sate, quantity: 5),
+            (product: products.kerupuk, quantity: 5),
+            (product: products.risol, quantity: 5)
+        ]
+        let maret1Sale = createSale(date: maret1Date, items: maret1Items, context: context)
+        context.insert(maret1Sale)
+        
+        let maret14Date = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 14))!
+        let maret14Items = [
+            (product: products.bebek, quantity: 20),
+            (product: products.minyak, quantity: 20),
+            (product: products.nasi, quantity: 20),
+            (product: products.kwetiau, quantity: 20),
+            (product: products.pete, quantity: 20),
+            (product: products.kangkung, quantity: 20),
+            (product: products.ikan, quantity: 20),
+            (product: products.sate, quantity: 20),
+            (product: products.kerupuk, quantity: 20),
+            (product: products.risol, quantity: 20)
+        ]
+        let maret14Sale = createSale(date: maret14Date, items: maret14Items, context: context)
+        context.insert(maret14Sale)
+        
+        let maret21Date = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 21))!
+        let maret21Items = [
+            (product: products.bebek, quantity: 5),
+            (product: products.minyak, quantity: 5),
+            (product: products.nasi, quantity: 5),
+            (product: products.kwetiau, quantity: 5),
+            (product: products.pete, quantity: 5),
+            (product: products.kangkung, quantity: 6),
+            (product: products.ikan, quantity: 0),
+            (product: products.sate, quantity: 1),
+            (product: products.kerupuk, quantity: 2),
+            (product: products.risol, quantity: 3)
+        ]
+        let maret21Sale = createSale(date: maret21Date, items: maret21Items, context: context)
+        context.insert(maret21Sale)
+        
+        let maret28Date = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 28))!
+        let maret28Items = [
+            (product: products.bebek, quantity: 1),
+            (product: products.minyak, quantity: 2),
+            (product: products.nasi, quantity: 3),
+            (product: products.kwetiau, quantity: 4),
+            (product: products.pete, quantity: 5),
+            (product: products.kangkung, quantity: 6),
+            (product: products.ikan, quantity: 7),
+            (product: products.sate, quantity: 8),
+            (product: products.kerupuk, quantity: 9),
+            (product: products.risol, quantity: 10)
+        ]
+        let maret28Sale = createSale(date: maret28Date, items: maret28Items, context: context)
+        context.insert(maret28Sale)
+    }
+
+    // Define a type alias or struct to store the product collection
+    typealias ProductCollection = (bebek: Product, minyak: Product, nasi: Product, kwetiau: Product, pete: Product,
+                                  kangkung: Product, ikan: Product, sate: Product, kerupuk: Product, risol: Product)
+    
+    // Helper function to create and return all products
+    private static func createProducts() -> ProductCollection {
+        let bebek = createProduct(name: "Bebek Goreng", price: 10000)
+        let minyak = createProduct(name: "Minyak Goreng", price: 5000)
+        let nasi = createProduct(name: "Nasi Goreng", price: 5000)
+        let kwetiau = createProduct(name: "Kwetiau Goreng", price: 30000)
+        let pete = createProduct(name: "Pete", price: 15000)
+        let kangkung = createProduct(name: "Kangkung", price: 5000)
+        let ikan = createProduct(name: "Ikan", price: 25000)
+        let sate = createProduct(name: "Sate", price: 50000)
+        let kerupuk = createProduct(name: "Kerupuk", price: 3000)
+        let risol = createProduct(name: "Risol", price: 4000)
+
+        return (bebek, minyak, nasi, kwetiau, pete, kangkung, ikan, sate, kerupuk, risol)
+    }
+
+    // Helper function to create a Product
+    private static func createProduct(name: String, price: Int) -> Product {
+        return Product(name: name, price: price)
+    }
+
+    // Helper function to create a ProductOnSale
+    private static func createProductOnSale(product: Product, quantity: Int) -> ProductOnSale {
+        return ProductOnSale(product: product, quantity: quantity)
+    }
+
+    // Helper function to create and return a Sale
+    private static func createSale(date: Date, items: [(product: Product, quantity: Int)], context: ModelContext) -> Sale {
+        let sale = Sale(date: date)
+        for item in items {
+            let productOnSale = createProductOnSale(product: item.product, quantity: item.quantity)
+            sale.items.append(productOnSale)
+        }
+        return sale
     }
 }
