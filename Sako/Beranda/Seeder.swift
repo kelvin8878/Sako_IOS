@@ -38,7 +38,7 @@ struct Seeder {
 
         context.insert(sale)
 
-        let sales = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 1))!)
+        let sales = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 14))!)
 
         let bebeks = Product(name: "Bebek Goreng", price: 10000)
         let minyaks = Product(name: "Minyak Goreng", price: 15000)
@@ -64,6 +64,34 @@ struct Seeder {
         context.insert(kwetiauItems)
 
         context.insert(sales)
+        
+        let saless = Sale(date: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 21))!)
+
+        let bebekss = Product(name: "Bebek Goreng", price: 20000)
+        let minyakss = Product(name: "Minyak Goreng", price: 25000)
+        let nasiss = Product(name: "Nasi Goreng", price: 25000)
+        let kwetiauss = Product(name: "Kwetiau Goreng", price: 25000)
+
+        let bebekItemss = ProductOnSale(product: bebeks, quantity: 100)
+        let minyakItemss = ProductOnSale(product: minyaks, quantity: 10)
+        let nasiItemss = ProductOnSale(product: nasis, quantity: 20)
+        let kwetiauItemss = ProductOnSale(product: kwetiaus, quantity: 10)
+
+        saless.items.append(contentsOf: [bebekItemss, minyakItemss, nasiItemss,kwetiauItemss])
+
+        // Insert
+        context.insert(bebekss)
+        context.insert(minyakss)
+        context.insert(nasiss)
+        context.insert(kwetiauss)
+
+        context.insert(bebekItemss)
+        context.insert(minyakItemss)
+        context.insert(nasiItemss)
+        context.insert(kwetiauItemss)
+
+        context.insert(saless)
+        
 //        // MARK: Contoh 1
 //        let Bebek = Product(name: "Bebek Goreng", price: 10000)
 //        let BebekItem = ProductOnSale(product: Bebek, quantity: 2)

@@ -64,7 +64,6 @@ extension Array where Element == Sale {
         for sale in self {
             // Hanya transaksi yang ada di bulan yang dipilih
             guard calendar.isDate(sale.date, equalTo: selectedDate, toGranularity: .month) else { continue }
-            
             let day = calendar.component(.day, from: sale.date)
             
             switch day {

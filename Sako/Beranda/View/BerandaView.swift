@@ -13,7 +13,11 @@ struct BerandaView: View {
     var filteredSales: [Sale] {
         BerandaLogic.filteredSales(from: allSales, by: selectedDate)
     }
-
+    
+    var weeklyRevenue: [Int] {
+            filteredSales.totalRevenuePerWeek(inMonthOf: selectedDate)
+        }
+    
     var rankedProducts: [(name: String, revenue: Int, quantity: Int)] {
         BerandaLogic.rankedProducts(from: filteredSales)
     }
@@ -53,7 +57,7 @@ struct BerandaView: View {
                         TotalPendapatanView(totalRevenue: totalRevenue, revenueChange: revenueChange)
                         
                         // Chart mingguan
-                        ChartMingguanView()
+                        ChartMingguanView(weeklyRevenue: weeklyRevenue)
 
                         // Produk Terlaris
                         ProdukTerlarisView(rankedProducts: rankedProducts, showTop10: $showTop10)

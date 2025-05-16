@@ -49,7 +49,7 @@ struct MonthYearPicker: UIViewControllerRepresentable {
             self.currentYear = calendar.component(.year, from: currentDate)
 
             // Allow years from current year to 5 years in the future
-            self.years = Array((self.currentYear - 3)...(self.currentYear + 3))
+            self.years = Array((self.currentYear - 10)...(self.currentYear + 3))
         }
 
         func numberOfComponents(in pickerView: UIPickerView) -> Int {
